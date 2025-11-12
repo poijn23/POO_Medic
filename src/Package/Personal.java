@@ -2,14 +2,16 @@ package Package;
 import java.sql.Date;
 public class Personal {
     private String nombre;
-    private Date fechanacimiento;
+    private Date fechaNacimiento;
     private String clavePersonal;
     private String passPersonal;
-    public Personal(String nombre, Date fechanacimiento, String clavePersonal, String passPersonal) {
+    private String rolId;
+    public Personal(String nombre, Date fechaNacimiento, String clavePersonal, String passPersonal, String rolId) {
         this.nombre = nombre;
-        this.fechanacimiento = fechanacimiento;
+        this.fechaNacimiento = fechaNacimiento;
         this.clavePersonal = clavePersonal;
         this.passPersonal = passPersonal;
+        this.rolId = rolId;
     }
     public String getNombre() {
         return nombre;
@@ -17,16 +19,28 @@ public class Personal {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public Date getFechanacimiento() {
-        return this.fechanacimiento;
+    public Date getFechaNacimiento() {
+        return this.fechaNacimiento;
     }
-    public void setFechanacimiento(Date fechanacimiento) {}
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
     public String getClavePersonal() {
         return this.clavePersonal;
     }
-    public void setClavePersonal(String clavePersonal) {}
+    public void setClavePersonal(String clavePersonal) {
+        this.clavePersonal = clavePersonal;
+    }
     public String getPassPersonal() {
         return passPersonal;
     }
-    public void setPassPersonal(String passPersonal) {}
+    public void setPassPersonal(String passPersonal) {
+        this.passPersonal = passPersonal;
+    }
+    public String getRolId() {
+        return rolId;
+    }
+    public void setRolId(String rolId) {
+        this.rolId = rolId;
+    }
 }
