@@ -36,5 +36,4 @@ public class Calificacion {
     public void setCalificacionCurso(String calificacionCurso) {
         this.calificacionCurso = calificacionCurso;
     }
-
 }
