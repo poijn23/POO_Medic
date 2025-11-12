@@ -50,7 +50,6 @@ public class Estudiante {
     public void setActaNacimiento(String actaNacimiento) {this.actaNacimiento = actaNacimiento;}
     public void setHojaPresentacion(String hojaPresentacion) {this.hojaPresentacion = hojaPresentacion;}
 
-
 }
 
 
