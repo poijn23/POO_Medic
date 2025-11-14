@@ -19,7 +19,7 @@ public class LoginController implements ActionListener{
         final String usuarioTest = "prueba";
         final String contraseniaTest = "12345";
 
-        if (usuario.isEmpty() || usuario.isEmpty()) {
+        if (usuarioTest.isEmpty() || contraseniaTest.isEmpty()) {
             showError("Por favor, ingrese usuario y contraseña.");
             return;
         }
@@ -50,7 +50,7 @@ public class LoginController implements ActionListener{
             String contraseniaHasheadaBD = ConexionBD.obtenerContraseniaBD(usuario);
             if(contraseniaHasheadaBD != null){
                 if(PasswordHasher.verificarContraseña(contrasenia, contraseniaHasheadaBD)){
-                    JOptionPane.showMessageDialog(login, "Acceso conceido", "Exito", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(login, "Acceso concedido", "Exito", JOptionPane.INFORMATION_MESSAGE);
                     login.dispose();
                 }
             }else {
