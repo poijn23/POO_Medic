@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginController implements ActionListener{
+    Consult_Database con = new Consult_Database();
     private Login login;
     public LoginController(Login login) {
         this.login = login;
@@ -30,7 +31,7 @@ public class LoginController implements ActionListener{
 
             login.dispose();
 
-            RegistroAsistencia registroAsistenciaPanel = new RegistroAsistencia();
+            RegistroAsistencia registroAsistenciaPanel = new RegistroAsistencia(con);
             JFrame frameAsistencia = new JFrame("Registro de Asistencia");
 
             frameAsistencia.setContentPane(registroAsistenciaPanel.panel1);

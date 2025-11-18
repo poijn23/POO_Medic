@@ -23,6 +23,8 @@ public class SubirConstancia extends JFrame {
 
         this.add(centro, BorderLayout.CENTER);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
     }
 
     public void inicializarComponentes(){
