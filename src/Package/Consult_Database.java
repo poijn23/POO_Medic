@@ -3,7 +3,7 @@ package Package;
 import java.sql.*;
 
 public class Consult_Database {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/OOP";
+    private static final String DB_URL = "jdbc:mysql://34.31.14.40:3306/ProyectoDyPOO";
     private static final String DB_USER = "grupoPOO";
     private static final String DB_PASS = "LfftG2acd9Mv7%k7";
 
@@ -14,8 +14,6 @@ public class Consult_Database {
             PreparedStatement statement=connection.prepareStatement(sql)){
             statement.setString(1,usuario.trim());
             statement.setString(2,contrasenia.trim());
-
-            System.out.println("|||||"+usuario + " " + contrasenia);
             try(ResultSet rs = statement.executeQuery()){
                 if(rs.next()){
                     return true;
