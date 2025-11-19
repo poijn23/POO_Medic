@@ -31,6 +31,7 @@ public class ModificarEstudiante extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Se hace clic al botón de modificar
+
                 if (nombre.isEmpty()){
 
                 }
