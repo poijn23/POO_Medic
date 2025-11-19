@@ -6,14 +6,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-public class crearEstudiante {
+public class crearEstudiante{
 
     // --- VARIABLES ---
     private JPanel panelPrincipal;
     private JPanel panelDatosPersonales;
     private JPanel panelDatosAcademicos;
 
-    // Tus campos (asegúrate que los nombres coincidan)
     private JTextField nombreTextField;
     private JTextField matriculaTextField;
     private JPasswordField contrasenapasswordField;

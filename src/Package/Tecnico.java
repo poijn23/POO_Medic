@@ -9,3 +9,4 @@ public class Tecnico extends Personal {
     public void cambiarContraseña(String rolID){} // usr personal
     public void cambiarContraseña(){} // usr Estudiante
 }
+
