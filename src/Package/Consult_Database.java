@@ -10,7 +10,7 @@ public class Consult_Database {
     public boolean validarUsuario(String usuario,String contrasenia) {
         String sql = "select * from view_name where ID = ? and Password = ?";
 
-        try(Connection connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASS);
+        try(Connection connection= getConnection();
             PreparedStatement statement=connection.prepareStatement(sql)){
             statement.setString(1,usuario.trim());
             statement.setString(2,contrasenia.trim());
@@ -27,7 +27,13 @@ public class Consult_Database {
     }
 
     private Connection getConnection(){
-
-        return null;
+        try(
+                Connection conn=DriverManager.getConnection(DB_URL,DB_USER,DB_PASS);
+        ) {
+            return conn;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }
