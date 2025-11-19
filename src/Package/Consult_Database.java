@@ -25,4 +25,9 @@ public class Consult_Database {
         }
         return false;
     }
+
+    private Connection getConnection(){
+
+        return null;
+    }
 }
