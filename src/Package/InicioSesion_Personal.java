@@ -1,8 +1,10 @@
 package Package;
   import javax.swing.*;
-  import java.awt.*;
 
 public class InicioSesion_Personal {
-    private JPanel panelPrincipal;
+private JPanel cocntentpane;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JButton iniciarButton;
 
 }
