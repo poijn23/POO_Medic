@@ -13,7 +13,6 @@ public class crearEstudiante{
     private JPanel panelDatosPersonales;
     private JPanel panelDatosAcademicos;
 
-    // Tus campos (asegúrate que los nombres coincidan)
     private JTextField nombreTextField;
     private JTextField matriculaTextField;
     private JPasswordField contrasenapasswordField;

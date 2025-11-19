@@ -7,4 +7,5 @@ private JPanel cocntentpane;
     private JTextField textField2;
     private JButton iniciarButton;
 
+    private JPanel panelPrincipal;
 }
