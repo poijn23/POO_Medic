@@ -13,9 +13,11 @@ public class MainPanel extends JFrame implements ActionListener {
     private JTextField user;
     private JPasswordField password;
     private JButton iniciarButton;
+    private JButton altaEstudiante;
 
     public MainPanel()
     {
+
         this.setContentPane( defaulPanel );
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
@@ -40,6 +42,11 @@ public class MainPanel extends JFrame implements ActionListener {
                 }
                 break;
             }
+            case "altaEstudiante":{
+                System.out.println("Hola");
+                crearEstudiante crearEstudiante = new crearEstudiante(myDatabase);
+                break;
+            }
         }
     }
 
@@ -48,6 +55,8 @@ public class MainPanel extends JFrame implements ActionListener {
         asistenciaButton.setActionCommand("asistencia");
         iniciarButton.addActionListener(this);
         iniciarButton.setActionCommand("iniciar");
+        altaEstudiante.addActionListener(this);
+        altaEstudiante.setActionCommand("altaEstudiante");
     }
 
 }

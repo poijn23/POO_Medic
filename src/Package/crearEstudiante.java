@@ -5,8 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class crearEstudiante {
+public class crearEstudiante extends JFrame {
 
     // --- VARIABLES ---
     private JPanel panelPrincipal;
@@ -24,12 +27,15 @@ public class crearEstudiante {
     private JPanel panelResidente;
     private JTextField areatextField;
 
+    Consult_Database mysql;
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   //boton
     private JButton guardarbutton; // El botón de guardar
     private JLabel cargandoLabel; // El texto de "Cargando..."
 
     // --- CONSTRUCTOR ---
-    public crearEstudiante() {
+    public crearEstudiante(Consult_Database database) {
+        mysql = database;
         tipodeEstudiantecomboBox.addItem("Regular");
         tipodeEstudiantecomboBox.addItem("Residente");
 
@@ -78,12 +84,11 @@ public class crearEstudiante {
                     // 2. Validar datos
                     String nombre = nombreTextField.getText();
                     String matricula = matriculaTextField.getText();
-                    char[] passChars = contrasenapasswordField.getPassword();
-                    String contrasena = new String(passChars);
+                    String contrasena = new String(contrasenapasswordField.getPassword());
                     String fechaNacimiento = fechadeNacimientotextField.getText();
                     String curp = curptextField.getText();
                     String tipoEstudiante = (String) tipodeEstudiantecomboBox.getSelectedItem();
-                    String area = "";
+                    String area = "Medicina";
 
                     // Validación
                     if (nombre.isEmpty() || matricula.isEmpty() || contrasena.isEmpty() || curp.isEmpty()) {
@@ -93,11 +98,11 @@ public class crearEstudiante {
                             cargandoLabel.setVisible(false);
                         }
                         guardarbutton.setEnabled(true);
+
                         return;
                     }
 
                     if (tipoEstudiante.equals("Residente")) {
-                        area = areatextField.getText();
                         if (area.isEmpty()) {
                             JOptionPane.showMessageDialog(panelPrincipal, "El campo 'Área' es obligatorio ", "Error de Validación", JOptionPane.ERROR_MESSAGE);
                             // habilitar botón
@@ -108,6 +113,7 @@ public class crearEstudiante {
                             return;
                         }
                     }
+                    mysql.createTuplaAlumnos(matricula,contrasena,nombre, Date.valueOf(LocalDate.parse(fechaNacimiento,dateFormat)),curp,tipoEstudiante,area);
 
                     new SwingWorker<Void, Void>() {
                         @Override
@@ -125,6 +131,7 @@ public class crearEstudiante {
                             }
                             guardarbutton.setEnabled(true); // Habilitar el botón de nuevo
 
+
                             JOptionPane.showMessageDialog(panelPrincipal, "Estudiante " + nombre + " guardado con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
                             // Limpiar los campos después de guardar
@@ -140,9 +147,14 @@ public class crearEstudiante {
                 }
             });
         }
+        this.setContentPane( panelPrincipal );
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
     }
 
-    // MAIN
+    /* MAIN
     public static void main(String[] args) {
         JFrame frame = new JFrame("Crear Estudiante");
         crearEstudiante formulario = new crearEstudiante();
@@ -157,5 +169,5 @@ public class crearEstudiante {
         frame.setSize(600, 400); // Tamaño fijo para que se vea bien
         frame.setLocationRelativeTo(null); // Centrar
         frame.setVisible(true);
-    }
+    }*/
 }
