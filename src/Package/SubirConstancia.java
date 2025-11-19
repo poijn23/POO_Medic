@@ -19,7 +19,7 @@ public class SubirConstancia extends JFrame {
         setTitle("Subir Constancia");
         setSize(400, 200);
         inicializarComponentes();
-
+//jjj
         JPanel centro = new JPanel();
         centro.setLayout(null);
 
