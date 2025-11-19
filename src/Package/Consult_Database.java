@@ -28,8 +28,12 @@ public class Consult_Database {
 
     private Connection getConnection(){
         try(
-                Connection conn=Driver.Manager.getConnection(DB_URL,DB_ISER,DB_PASS)
-                return conn;
-        )
+                Connection conn=DriverManager.getConnection(DB_URL,DB_USER,DB_PASS);
+        ) {
+            return conn;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }
