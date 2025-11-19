@@ -3,8 +3,10 @@ package Package;
 
 public class InicioSesion_Personal {
     public JPanel cocntentpane;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JButton iniciarButton;
+    private JTextField Usuario;
+    private JButton botonIniciar;
+    private JLabel textoContraseña;
+    private JTextField contraseña;
+    private JLabel textoUsuario;
 
 }

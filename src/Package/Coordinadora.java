@@ -14,4 +14,33 @@ public class Coordinadora extends Personal{
     public void setCursos(String cursos) {
         this.cursos = cursos;
     }
+
+    public void darAltaEstudiantes (){
+    }
+    public void validarConstancia(){
+
+    }
+    public void verreportesDeInasistencia(){
+
+    }
+    public void cargarCalificasiones(){
+    }
+    public void asignarGuardias(){
+
+    }
+    public void modificarGuardias(){
+    }
+    public void asignarTutores(){
+    }
+    public void modificarTutores(){}
+    public void visualizarDocumentos(){}
+    public void gestionarCursos(){}
+    public void crearHistoricos(){
+    }
+    public void visualizarHistoricos(){}
+    public void borrarDocumentos(){}
+
+    }
+
+
 }
