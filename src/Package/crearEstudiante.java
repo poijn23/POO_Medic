@@ -85,7 +85,7 @@ public class crearEstudiante extends JFrame {
                     String nombre = nombreTextField.getText();
                     String matricula = matriculaTextField.getText();
                     String contrasena = new String(contrasenapasswordField.getPassword());
-                    String fechaNacimiento = fechadeNacimientotextField.getText();
+                    String fechaNacimiento = fechadeNacimientotextField.getText().trim();
                     String curp = curptextField.getText();
                     String tipoEstudiante = (String) tipodeEstudiantecomboBox.getSelectedItem();
                     String area = "Medicina";
@@ -113,7 +113,7 @@ public class crearEstudiante extends JFrame {
                             return;
                         }
                     }
-                    mysql.createTuplaAlumnos(matricula,contrasena,nombre, Date.valueOf(LocalDate.parse(fechaNacimiento,dateFormat)),curp,tipoEstudiante,area);
+                    mysql.createTuplaAlumnos(matricula,contrasena,nombre, Date.valueOf(LocalDate.parse(fechaNacimiento,dateFormat)),curp,"Residente",area);
 
                     new SwingWorker<Void, Void>() {
                         @Override

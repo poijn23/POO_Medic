@@ -18,7 +18,6 @@ public class Consult_Database {
                 statement.setString(2,contrasenia.trim());
                 try(ResultSet rs = statement.executeQuery()){
                     if(rs.next()){
-                        connection.close();
                         return true;
                     }
                 }
@@ -33,7 +32,7 @@ public class Consult_Database {
     public boolean createTuplaAlumnos(String usuario,String contrasenia,String nombre,Date fech_nac,String curp,String especial,String area){
         try(Connection conn=getConnection()){
             assert conn != null;
-            String sql = "instert into Estudiantes ('Nombre','ID','Password','Fech_Nac','CURP','Especialidad','Area') values (?,?,?,?,?,?,?)";
+            String sql = "insert into Estudiantes (Nombre,ID,Password,Fech_Nac,CURP,Especialidad,Area) values (?,?,?,?,?,?,?)";
             try(PreparedStatement statement=conn.prepareStatement(sql)){
                 statement.setString(1,nombre.trim());
                 statement.setString(2,usuario);
@@ -42,12 +41,10 @@ public class Consult_Database {
                 statement.setString(5,curp);
                 statement.setString(6,especial);
                 statement.setString(7,area);
-                try(ResultSet rs = statement.executeQuery()){
-                    if(rs.next()){
-                        conn.close();
+                int rs = statement.executeUpdate();
+                    if(rs >0){
                         return true;
                     }
-                }
             }
 
         }catch(SQLException e){
@@ -58,10 +55,9 @@ public class Consult_Database {
     }
 
     private Connection getConnection(){
-        try(
-                Connection conn=DriverManager.getConnection(DB_URL,DB_USER,DB_PASS);
-        ) {
-            return conn;
+        try
+         {
+            return DriverManager.getConnection(DB_URL,DB_USER,DB_PASS);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
