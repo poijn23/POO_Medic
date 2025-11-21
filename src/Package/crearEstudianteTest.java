@@ -33,7 +33,7 @@ public class crearEstudianteTest {
                 "",
                 "A012345",
                 "pass123",
-                "CURP",
+                "CURP", //18 digitos y validarla
                 "Medicina",
                 "Regular"
         );
