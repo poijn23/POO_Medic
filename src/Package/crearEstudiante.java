@@ -5,8 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class crearEstudiante{
+public class crearEstudiante extends JFrame {
 
     // --- VARIABLES ---
     private JPanel panelPrincipal;
@@ -23,12 +26,38 @@ public class crearEstudiante{
     private JPanel panelResidente;
     private JTextField areatextField;
 
+    Consult_Database mysql;
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   //boton
     private JButton guardarbutton; // El botón de guardar
     private JLabel cargandoLabel; // El texto de "Cargando..."
 
+
+    //  Validar Datos del formulario en caso de que falté alguno y validar el tipo de estudiante si el espacio está vacío.
+    public boolean validarDatos(String nombre, String matricula, String password, String curp, String area, String tipoEstudiante) {
+
+        // Validar vacíos en blanco
+        if (nombre == null || nombre.trim().isEmpty()) return false;
+        if (matricula == null || matricula.trim().isEmpty()) return false;
+        if (password == null || password.trim().isEmpty()) return false;
+        if (curp == null || curp.trim().isEmpty()) return false;
+
+        //Validar estudiante residente si lo dejó en blanco
+        if ("Residente".equals(tipoEstudiante)) {
+            if (area == null || area.trim().isEmpty()) {
+                return false;
+            }
+        }
+
+        //Validar longitud de CURP
+        if (curp.length() < 10) return false;
+
+        return true;
+    }
+
     // --- CONSTRUCTOR ---
-    public crearEstudiante() {
+    public crearEstudiante(Consult_Database database) {
+        mysql = database;
         tipodeEstudiantecomboBox.addItem("Regular");
         tipodeEstudiantecomboBox.addItem("Residente");
 
@@ -77,36 +106,28 @@ public class crearEstudiante{
                     // 2. Validar datos
                     String nombre = nombreTextField.getText();
                     String matricula = matriculaTextField.getText();
-                    char[] passChars = contrasenapasswordField.getPassword();
-                    String contrasena = new String(passChars);
-                    String fechaNacimiento = fechadeNacimientotextField.getText();
+                    String contrasena = new String(contrasenapasswordField.getPassword());
+                    String fechaNacimiento = fechadeNacimientotextField.getText().trim();
                     String curp = curptextField.getText();
                     String tipoEstudiante = (String) tipodeEstudiantecomboBox.getSelectedItem();
-                    String area = "";
+                    String area = "Medicina";
 
-                    // Validación
-                    if (nombre.isEmpty() || matricula.isEmpty() || contrasena.isEmpty() || curp.isEmpty()) {
-                        JOptionPane.showMessageDialog(panelPrincipal, "Complete todos los campos", "Error de Validación", JOptionPane.ERROR_MESSAGE);
-                        //habilitar botón
-                        if (cargandoLabel != null) {
-                            cargandoLabel.setVisible(false);
-                        }
+                    // Llama a tu nuevo metodo validarDatos
+                    boolean esValido = validarDatos(nombre, matricula, contrasena, curp, area, tipoEstudiante);
+
+                    if (!esValido) {
+                        // Si el es falso entonces pedirá que rellenes de nuevo
+                        JOptionPane.showMessageDialog(panelPrincipal, "Datos incorrectos o incompletos (Revise campos vacíos o Área de residente)", "Error", JOptionPane.ERROR_MESSAGE);
+
+                        // Se habilita el botón de nuevo.
+                        if (cargandoLabel != null) cargandoLabel.setVisible(false);
                         guardarbutton.setEnabled(true);
+
                         return;
                     }
 
-                    if (tipoEstudiante.equals("Residente")) {
-                        area = areatextField.getText();
-                        if (area.isEmpty()) {
-                            JOptionPane.showMessageDialog(panelPrincipal, "El campo 'Área' es obligatorio ", "Error de Validación", JOptionPane.ERROR_MESSAGE);
-                            // habilitar botón
-                            if (cargandoLabel != null) {
-                                cargandoLabel.setVisible(false);
-                            }
-                            guardarbutton.setEnabled(true);
-                            return;
-                        }
-                    }
+
+                    mysql.createTuplaAlumnos(matricula,contrasena,nombre, Date.valueOf(LocalDate.parse(fechaNacimiento,dateFormat)),curp,"Residente",area);
 
                     new SwingWorker<Void, Void>() {
                         @Override
@@ -124,6 +145,7 @@ public class crearEstudiante{
                             }
                             guardarbutton.setEnabled(true); // Habilitar el botón de nuevo
 
+
                             JOptionPane.showMessageDialog(panelPrincipal, "Estudiante " + nombre + " guardado con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
                             // Limpiar los campos después de guardar
@@ -139,22 +161,10 @@ public class crearEstudiante{
                 }
             });
         }
-    }
-
-    // MAIN
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Crear Estudiante");
-        crearEstudiante formulario = new crearEstudiante();
-
-        if (formulario.panelPrincipal == null) {
-            System.out.println("");
-            return;
-        }
-
-        frame.setContentPane(formulario.panelPrincipal);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400); // Tamaño fijo para que se vea bien
-        frame.setLocationRelativeTo(null); // Centrar
-        frame.setVisible(true);
+        this.setContentPane( panelPrincipal );
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
     }
 }
