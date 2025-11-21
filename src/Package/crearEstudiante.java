@@ -59,10 +59,10 @@ public class crearEstudiante extends JFrame {
         EspecialidadcomboBox.addItem("Enfermería");
         EspecialidadcomboBox.addItem("Nutrición");
 
-        // Como inicia en "Medicina", mostramos las opciones de medicina por defecto
+        //mostrar las opciones de medicina por defecto
         llenarComboTipoParaMedicina();
 
-        if (panelResidente != null) panelResidente.setVisible(true); // Medicina es el default
+        if (panelResidente != null) panelResidente.setVisible(true); // Medicina es default
         if (cargandoLabel != null) cargandoLabel.setVisible(false);
 
         EspecialidadcomboBox.addItemListener(new ItemListener() {
@@ -175,6 +175,7 @@ public class crearEstudiante extends JFrame {
         TipoEstudianteBox.removeAllItems(); // Limpiamos lo que haya
         TipoEstudianteBox.addItem("Interno");
         TipoEstudianteBox.addItem("Residente");
+        TipoEstudianteBox.addItem("Servicio social");
         // Si medicina también acepta servicio social, descomenta la siguiente linea:
         // TipoEstudianteBox.addItem("Servicio Social");
     }
