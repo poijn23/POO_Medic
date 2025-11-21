@@ -35,8 +35,8 @@ public class MainPanel extends JFrame implements ActionListener {
             }
             case "iniciar":{
                 if(myDatabase.validarUsuario(user.getText(), new String(password.getPassword()))) {
-                this.dispose();
-                SubirConstancia subirConstancia = new SubirConstancia();
+                    this.dispose();
+                    SubirConstancia subirConstancia = new SubirConstancia();
                 }
                 break;
             }
