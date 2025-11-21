@@ -21,36 +21,29 @@ public class crearEstudiante extends JFrame {
     private JPasswordField contrasenapasswordField;
     private JTextField fechadeNacimientotextField;
     private JTextField curptextField;
+
+    // Este es el combo principal (Medicina, Odontologia, etc.)
     private JComboBox EspecialidadcomboBox;
 
+    // PANEL QUE SE OCULTA
     private JPanel panelResidente;
-    private JTextField areatextField;
+
+    // Este es el combo secundario (Interno, Residente) que va DENTRO del panelResidente
+    private JComboBox TipoEstudianteBox;
 
     Consult_Database mysql;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-  //boton
-    private JButton guardarbutton; // El botón de guardar
-    private JLabel cargandoLabel; // El texto de "Cargando..."
-    private JComboBox TipoEstudianteBox;
 
+    private JButton guardarbutton;
+    private JLabel cargandoLabel;
 
-    //  Validar Datos del formulario en caso de que falté alguno y validar el tipo de estudiante si el espacio está vacío.
-    public boolean validarDatos(String nombre, String matricula, String password, String curp, String area, String tipoEstudiante) {
+    // --- Validación
+    public boolean validarDatos(String nombre, String matricula, String password, String curp) {
 
-        // Validar vacíos en blanco
         if (nombre == null || nombre.trim().isEmpty()) return false;
         if (matricula == null || matricula.trim().isEmpty()) return false;
         if (password == null || password.trim().isEmpty()) return false;
         if (curp == null || curp.trim().isEmpty()) return false;
-
-        //Validar estudiante residente si lo dejó en blanco
-        if ("Residente".equals(tipoEstudiante)) {
-            if (area == null || area.trim().isEmpty()) {
-                return false;
-            }
-        }
-
-        //Validar longitud de CURP
         if (curp.length() < 18) return false;
 
         return true;
@@ -59,41 +52,38 @@ public class crearEstudiante extends JFrame {
     // --- CONSTRUCTOR ---
     public crearEstudiante(Consult_Database database) {
         mysql = database;
+
+        // ESPECIALIDADES
         EspecialidadcomboBox.addItem("Medicina");
         EspecialidadcomboBox.addItem("Odontología");
-        EspecialidadcomboBox.addItem("Nutrición");
         EspecialidadcomboBox.addItem("Enfermería");
+        EspecialidadcomboBox.addItem("Nutrición");
 
-        TipoEstudianteBox.addItem("Residente");
-        TipoEstudianteBox.addItem("Servicio Social");
-        TipoEstudianteBox.addItem("Internos");
+        //mostrar las opciones de medicina por defecto
+        llenarComboTipoParaMedicina();
 
-
-        if (panelResidente != null) {
-            panelResidente.setVisible(false);
-        }
-
-        // Para hacerlo invisible
-        if (cargandoLabel != null) {
-            cargandoLabel.setVisible(false);
-        }
-
+        if (panelResidente != null) panelResidente.setVisible(true); // Medicina es default
+        if (cargandoLabel != null) cargandoLabel.setVisible(false);
 
         EspecialidadcomboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+
                     String seleccion = (String) EspecialidadcomboBox.getSelectedItem();
+
                     if (panelResidente != null) {
-                        if (seleccion.equals("Medicina")) {
+                        if ("Medicina".equals(seleccion)) {
+                            // Si es Medicina, muestra el panel y llenamos con opciones
                             panelResidente.setVisible(true);
+                            llenarComboTipoParaMedicina();
                         } else {
+                            // Si es Odontología, Nutrición, etc., ocultamos el panel
+                            // Automáticamente será "Servicio Social" al guardar
                             panelResidente.setVisible(false);
-                            if (areatextField != null) {
-                                areatextField.setText("");
-                            }
                         }
                     }
+                    // Reajustar tamaño de ventana
                     if (panelPrincipal != null) {
                         SwingUtilities.getWindowAncestor(panelPrincipal).pack();
                     }
@@ -101,80 +91,97 @@ public class crearEstudiante extends JFrame {
             }
         });
 
-        //BOTÓN GUARDAR
+        // 4. BOTÓN GUARDAR
         if (guardarbutton != null) {
             guardarbutton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (cargandoLabel != null) {
-                        cargandoLabel.setVisible(true);
-                    }
-                    guardarbutton.setEnabled(false); // Deshabilitar para clics dobles
+                    if (cargandoLabel != null) cargandoLabel.setVisible(true);
+                    guardarbutton.setEnabled(false);
 
-                    // 2. Validar datos
+                    // --- DATOS ---
                     String nombre = nombreTextField.getText();
                     String matricula = matriculaTextField.getText();
                     String contrasena = new String(contrasenapasswordField.getPassword());
                     String fechaNacimiento = fechadeNacimientotextField.getText().trim();
                     String curp = curptextField.getText();
-                    String tipoEstudiante = (String) EspecialidadcomboBox.getSelectedItem();
-                    // area medicina, enfermeria, nutricion, odontologia
-                    // tipo de estudiante residente-medicina y servicio social, internos-medicina
-                    String area = "Medicina";
 
-                    // Llama a tu nuevo metodo validarDatos
-                    boolean esValido = validarDatos(nombre, matricula, contrasena, curp, area, tipoEstudiante);
+                    // DATOS ACADÉMICOS
+                    String especialidad = (String) EspecialidadcomboBox.getSelectedItem();
+                    String tipoEstudiante = ""; // Aquí guardar si es Residente, Interno o SS
 
-                    if (!esValido) {
-                        // Si el es falso entonces pedirá que rellenes de nuevo
-                        JOptionPane.showMessageDialog(panelPrincipal, "Datos incorrectos o incompletos (Revise campos vacíos o Área de residente)", "Error", JOptionPane.ERROR_MESSAGE);
+                    if (especialidad.equals("Medicina")) {
+                        tipoEstudiante = (String) TipoEstudianteBox.getSelectedItem();
+                    } else {
+                        // Si NO es medicina, forzamos a que sea Servicio Social
+                        tipoEstudiante = "Servicio Social";
+                    }
 
-                        // Se habilita el botón de nuevo.
+                    // --- VALIDACIÓN ---
+                    if (!validarDatos(nombre, matricula, contrasena, curp)) {
+                        JOptionPane.showMessageDialog(panelPrincipal, "Datos incompletos o CURP inválida.", "Error", JOptionPane.ERROR_MESSAGE);
                         if (cargandoLabel != null) cargandoLabel.setVisible(false);
                         guardarbutton.setEnabled(true);
-
                         return;
                     }
 
+                    final String tipoFinal = tipoEstudiante;
 
-                    mysql.createTuplaAlumnos(matricula,contrasena,nombre, Date.valueOf(LocalDate.parse(fechaNacimiento,dateFormat)),curp,"Residente",area);
+                    try {
+                        mysql.createTuplaAlumnos(matricula, contrasena, nombre, Date.valueOf(LocalDate.parse(fechaNacimiento, dateFormat)), curp, tipoFinal, especialidad);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(panelPrincipal, "Error al guardar en BD o fecha inválida: " + ex.getMessage());
+                        guardarbutton.setEnabled(true);
+                        if (cargandoLabel != null) cargandoLabel.setVisible(false);
+                        return;
+                    }
 
                     new SwingWorker<Void, Void>() {
                         @Override
                         protected Void doInBackground() throws Exception {
-                            // operación de red o base de datos que tarda 2 segundos
-                            Thread.sleep(2000);
+                            Thread.sleep(1500); // Simulación
                             return null;
                         }
 
                         @Override
                         protected void done() {
-                            // mostrar resultado
-                            if (cargandoLabel != null) {
-                                cargandoLabel.setVisible(false);
-                            }
-                            guardarbutton.setEnabled(true); // Habilitar el botón de nuevo
+                            if (cargandoLabel != null) cargandoLabel.setVisible(false);
+                            guardarbutton.setEnabled(true);
 
+                            JOptionPane.showMessageDialog(panelPrincipal, "Estudiante guardado:\n" + especialidad + " - " + tipoFinal, "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-                            JOptionPane.showMessageDialog(panelPrincipal, "Estudiante " + nombre + " guardado con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                            // Limpiar los campos después de guardar
+                            // Limpiar campos
                             nombreTextField.setText("");
                             matriculaTextField.setText("");
-                            contrasenapasswordField.setText(""); // Para JPasswordField
+                            contrasenapasswordField.setText("");
                             fechadeNacimientotextField.setText("");
                             curptextField.setText("");
-                            areatextField.setText(""); // Si está visible
-                            EspecialidadcomboBox.setSelectedIndex(0); // Volver a la primera opción
+                            EspecialidadcomboBox.setSelectedIndex(0); // Volver a Medicina
                         }
                     }.execute();
                 }
             });
         }
-        this.setContentPane( panelPrincipal );
+
+        this.setContentPane(panelPrincipal);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.pack();
-        this.setVisible(true);
+        this.setSize(600, 500); // Tamaño fijo recomendado
         this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+
+    // --- llenar medicina
+    private void llenarComboTipoParaMedicina() {
+        TipoEstudianteBox.removeAllItems(); // Limpiamos lo que haya
+        TipoEstudianteBox.addItem("Interno");
+        TipoEstudianteBox.addItem("Residente");
+        TipoEstudianteBox.addItem("Servicio social");
+        // Si medicina también acepta servicio social, descomenta la siguiente linea:
+        // TipoEstudianteBox.addItem("Servicio Social");
+    }
+
+    public static void main(String[] args) {
+        // Main
+        new crearEstudiante(null);
     }
 }
