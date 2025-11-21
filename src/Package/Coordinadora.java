@@ -9,7 +9,8 @@ public class Coordinadora extends Personal{
         this.cursos = cursos;
     }
     public String getCursos() {
-        return cursos;
+        return this.cursos;
+
     }
     public void setCursos(String cursos) {
         this.cursos = cursos;
