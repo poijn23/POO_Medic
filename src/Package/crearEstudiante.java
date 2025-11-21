@@ -21,7 +21,7 @@ public class crearEstudiante extends JFrame {
     private JPasswordField contrasenapasswordField;
     private JTextField fechadeNacimientotextField;
     private JTextField curptextField;
-    private JComboBox tipodeEstudiantecomboBox;
+    private JComboBox EspecialidadcomboBox;
 
     private JPanel panelResidente;
     private JTextField areatextField;
@@ -31,6 +31,7 @@ public class crearEstudiante extends JFrame {
   //boton
     private JButton guardarbutton; // El botón de guardar
     private JLabel cargandoLabel; // El texto de "Cargando..."
+    private JComboBox TipoEstudianteBox;
 
 
     //  Validar Datos del formulario en caso de que falté alguno y validar el tipo de estudiante si el espacio está vacío.
@@ -50,7 +51,7 @@ public class crearEstudiante extends JFrame {
         }
 
         //Validar longitud de CURP
-        if (curp.length() < 10) return false;
+        if (curp.length() < 18) return false;
 
         return true;
     }
@@ -58,8 +59,15 @@ public class crearEstudiante extends JFrame {
     // --- CONSTRUCTOR ---
     public crearEstudiante(Consult_Database database) {
         mysql = database;
-        tipodeEstudiantecomboBox.addItem("Regular");
-        tipodeEstudiantecomboBox.addItem("Residente");
+        EspecialidadcomboBox.addItem("Medicina");
+        EspecialidadcomboBox.addItem("Odontología");
+        EspecialidadcomboBox.addItem("Nutrición");
+        EspecialidadcomboBox.addItem("Enfermería");
+
+        TipoEstudianteBox.addItem("Residente");
+        TipoEstudianteBox.addItem("Servicio Social");
+        TipoEstudianteBox.addItem("Internos");
+
 
         if (panelResidente != null) {
             panelResidente.setVisible(false);
@@ -71,13 +79,13 @@ public class crearEstudiante extends JFrame {
         }
 
 
-        tipodeEstudiantecomboBox.addItemListener(new ItemListener() {
+        EspecialidadcomboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    String seleccion = (String) tipodeEstudiantecomboBox.getSelectedItem();
+                    String seleccion = (String) EspecialidadcomboBox.getSelectedItem();
                     if (panelResidente != null) {
-                        if (seleccion.equals("Residente")) {
+                        if (seleccion.equals("Medicina")) {
                             panelResidente.setVisible(true);
                         } else {
                             panelResidente.setVisible(false);
@@ -109,7 +117,9 @@ public class crearEstudiante extends JFrame {
                     String contrasena = new String(contrasenapasswordField.getPassword());
                     String fechaNacimiento = fechadeNacimientotextField.getText().trim();
                     String curp = curptextField.getText();
-                    String tipoEstudiante = (String) tipodeEstudiantecomboBox.getSelectedItem();
+                    String tipoEstudiante = (String) EspecialidadcomboBox.getSelectedItem();
+                    // area medicina, enfermeria, nutricion, odontologia
+                    // tipo de estudiante residente-medicina y servicio social, internos-medicina
                     String area = "Medicina";
 
                     // Llama a tu nuevo metodo validarDatos
@@ -155,7 +165,7 @@ public class crearEstudiante extends JFrame {
                             fechadeNacimientotextField.setText("");
                             curptextField.setText("");
                             areatextField.setText(""); // Si está visible
-                            tipodeEstudiantecomboBox.setSelectedIndex(0); // Volver a la primera opción
+                            EspecialidadcomboBox.setSelectedIndex(0); // Volver a la primera opción
                         }
                     }.execute();
                 }
