@@ -32,6 +32,27 @@ public class Consult_Database {
         }
         return false;
     }
+    
+    public String getRol(String name, String pass){
+        String sql = "select role from view_name where ID = ? and Password = ?";
+        String rol = null;
+        try(Connection connection= getConnection()) {
+            assert connection != null;
+            try(PreparedStatement statement=connection.prepareStatement(sql)){
+                statement.setString(1,name.trim());
+                statement.setString(2,pass.trim());
+                try(ResultSet rs = statement.executeQuery()){
+                    if(rs.next()){
+                       rol= rs.getString("role");
+                    }
+                }
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+        return rol;
+    }
 
     public void createTuplaAlumnos(String usuario, String contrasenia, String nombre, Date fech_nac, String curp, String especial, String area){
         try(Connection conn=getConnection()){
@@ -67,6 +88,24 @@ public class Consult_Database {
             }
         }
     }catch(SQLException e){System.out.println(e.getMessage()); return false;}
+        return false;
+    }
+
+    public boolean isInAsistencia(String usuario, Date today, Boolean asistencia){
+        try(Connection conn=getConnection()){
+            assert conn != null;
+            String sql = "select * from RegistroAsistencia where matricula = ? and fecha = ? and asistencia = ?";
+            try(PreparedStatement statement=conn.prepareStatement(sql)){
+                statement.setString(1,usuario.trim());
+                statement.setDate(2,today);
+                statement.setBoolean(3,asistencia);
+                try(ResultSet rs = statement.executeQuery()){
+                    if(rs.next()){
+                        return true;
+                    }
+                }
+            }
+        }catch(SQLException e){System.out.println(e.getMessage()); return false;}
         return false;
     }
 

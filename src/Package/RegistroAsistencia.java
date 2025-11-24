@@ -39,7 +39,11 @@ public class RegistroAsistencia extends JFrame implements ActionListener {
             if(!myDatabase.isInAsistencia(Matricula.getText(), date)){
                 myDatabase.createTuplaAsistencia(Matricula.getText(),date,time);
             }else{
-                myDatabase.registroSalida(Matricula.getText(),date, time);
+                if(!myDatabase.isInAsistencia(Matricula.getText(),date, Boolean.TRUE)){
+                    myDatabase.registroSalida(Matricula.getText(),date, time);
+                }else{
+                    System.out.println("Ya se registro la salida");
+                }
             }
         }
     }
