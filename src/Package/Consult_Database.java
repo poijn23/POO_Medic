@@ -49,7 +49,7 @@ public class Consult_Database {
             }
         } catch (SQLException e){
             System.out.println(e.getMessage());
-            return null;
+            return rol;
         }
         return rol;
     }
