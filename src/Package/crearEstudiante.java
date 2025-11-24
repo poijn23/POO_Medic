@@ -31,6 +31,7 @@ public class crearEstudiante extends JFrame {
     // Este es el combo secundario (Interno, Residente) que va DENTRO del panelResidente
     private JComboBox TipoEstudianteBox;
 
+
     Consult_Database mysql;
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
