@@ -4,14 +4,22 @@ import javax.swing.*;
 
 public class crearCurso {
 
-    private JTextField textField1;
-    private JCheckBox medicinaCheckBox;
-    private JCheckBox nutriciónCheckBox;
-    private JCheckBox enfermeriaCheckBox;
-    private JCheckBox odontologiaCheckBox;
-    private JButton guardarButton;
-    private JRadioButton siRadioButton;
-    private JRadioButton noRadioButton;
+    private JTextField txtNombreCurso;
+    private JCheckBox chkMedicina;
+    private JCheckBox chkNutricion;
+    private JCheckBox chkEnfermeria;
+    private JCheckBox chkOdontologia;
+    private JButton btnGuardarCurso;
+    private JRadioButton rbtnSi;
+    private JRadioButton rbtnNo;
+    private JPanel panelRoot;
+    private JPanel PanelEncabezado;
+    private JLabel lblNombreCurso;
+    private JPanel panelContEspecialidades;
+    private JLabel lblEspecialidad;
+    private JPanel panelPie;
+    private JPanel panelRestricciones;
+    private JLabel lblRestriccion;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
