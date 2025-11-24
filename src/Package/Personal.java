@@ -43,11 +43,13 @@ public class Personal {
     public void setRolId(String rolId) {
         this.rolId = rolId;
     }
-
-    //Lo ocuparán coordinadora y secretaria
-    public void darAltaEstudiantes (){
+    public void emviarNotificasiones(){
 
     }
+    public void  modificarEstudiante(){}
+    public void modificarContrasenas(){}
+
+
 
 
 }

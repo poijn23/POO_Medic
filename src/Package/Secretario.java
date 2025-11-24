@@ -6,5 +6,15 @@ public class Secretario extends Personal{
                       String passPersonal, String rolId) {
         super(nombre, fechaNacimiento, clavePersonal, passPersonal, rolId);
     }
+    public void asignarGuardias(){
 
+    }
+    public void modificarGuardias(){
+    }
+    public void asignarTutores(){
+    }
+    public void generarReporte(){
+    }
+    public void visualizarDocumentos(){}
+    public void gestionarCursos(){}
 }
