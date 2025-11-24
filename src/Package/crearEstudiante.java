@@ -181,8 +181,8 @@ public class crearEstudiante extends JFrame {
         // TipoEstudianteBox.addItem("Servicio Social");
     }
 
-    public static void main(String[] args) {
+    //   public static void main(String[] args) {
         // Main
-        new crearEstudiante(null);
-    }
+   //     new crearEstudiante(null);
+   // }
 }
