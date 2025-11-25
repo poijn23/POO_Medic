@@ -60,6 +60,10 @@ public class crearEstudiante extends JFrame {
         EspecialidadcomboBox.addItem("Odontologia");
         EspecialidadcomboBox.addItem("Enfermeria");
         EspecialidadcomboBox.addItem("Nutricion");
+        EspecialidadcomboBox.addItem("Medicina");
+        EspecialidadcomboBox.addItem("Odontologia");
+        EspecialidadcomboBox.addItem("Enfermeria");
+        EspecialidadcomboBox.addItem("Nutricion");
 
         //mostrar las opciones de medicina por defecto
         llenarComboTipoParaMedicina();
