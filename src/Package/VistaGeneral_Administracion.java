@@ -2,7 +2,7 @@ package Package;
 
 import javax.swing.*;
 import java.awt.*;
-
+//hhhh
 public class VistaGeneral_Administracion extends JFrame {
     public JButton altaCurso;
     public JButton crearEstudiante;
