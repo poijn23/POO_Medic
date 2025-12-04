@@ -106,6 +106,7 @@ public class RegistroPersonal extends JFrame {
         if(validarNombre()){
             return true;
         }
+
         return false;
     }
 
@@ -121,7 +122,7 @@ public class RegistroPersonal extends JFrame {
 
             String passwordHasheada = PasswordHasher.hashPassword(passwordPlana);
 
-            //Manejo y Conversión de Fecha (String -> java.sql.Date)
+            //Manejo y Conversión de Fecha String -> java.sql.Date
             java.sql.Date fechaSQL;
             try {
 
@@ -148,7 +149,7 @@ public class RegistroPersonal extends JFrame {
 
             } else {
                 JOptionPane.showMessageDialog(this, "Error al guardar el personal en la Base de Datos. Revise los logs de la consola.", "Error de BD", JOptionPane.ERROR_MESSAGE);
-                etiquetaError.setText("Error en la inserción de la BD.");
+                etiquetaError.setText("Error al insertar en la BD");
             }
 
         } else {

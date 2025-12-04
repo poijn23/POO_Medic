@@ -150,7 +150,7 @@ public class Consult_Database {
 
             try (PreparedStatement statement = conn.prepareStatement(sql)) {
                 statement.setString(1, nombre.trim());
-                statement.setDate(2, fechaNac); // java.sql.Date
+                statement.setDate(2, fechaNac);
                 statement.setString(3, rol.trim());
                 statement.setString(4, clavePersonal.trim());
                 statement.setString(5, password);
