@@ -141,4 +141,33 @@ public class Consult_Database {
             }
         }catch(SQLException e){System.out.println(e.getMessage());}
     }
+
+    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String clavePersonal, String password) {
+        String sql = "INSERT INTO Personal (Nombre, Fech_Nacimiento, Rol, ClavePersonal, Password) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection()) {
+            if (conn == null) return false; // Falló la conexión
+
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+                statement.setString(1, nombre.trim());
+                statement.setDate(2, fechaNac); // java.sql.Date
+                statement.setString(3, rol.trim());
+                statement.setString(4, clavePersonal.trim());
+                statement.setString(5, password);
+
+
+                int filasAfectadas = statement.executeUpdate();
+
+                return filasAfectadas > 0;
+
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al insertar Personal en la BD.");
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Error Code: " + e.getErrorCode());
+            System.err.println("Message: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

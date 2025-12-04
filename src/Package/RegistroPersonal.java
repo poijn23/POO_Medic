@@ -27,9 +27,11 @@ public class RegistroPersonal extends JFrame {
         this.myDatabase = myDatabase;
         setTitle("Registro de Personal");
         setSize(500,300);
-        inicializarComponentes();
+
         btnAceptar.addActionListener(e -> registrar());
         btnCancelar.addActionListener(e -> cancelar());
+
+        inicializarComponentes();
         JPanel centro = new JPanel();
         centro.setLayout(null);
 
@@ -107,15 +109,53 @@ public class RegistroPersonal extends JFrame {
         return false;
     }
 
+
     public void registrar(){
         if(validacion()){
-            JOptionPane.showMessageDialog(null, "Bienvenido el personal");
+            String rolSeleccionado = (String) rolesCombo.getSelectedItem();
+            String nombrePersonal = nombre.getText();
+            String clave = clavePersonal.getText();
+            String password = new String(passPersonal.getPassword());
+
+            String passwordPlana = new String(passPersonal.getPassword());
+
+            String passwordHasheada = PasswordHasher.hashPassword(passwordPlana);
+
+            //Manejo y Conversión de Fecha (String -> java.sql.Date)
+            java.sql.Date fechaSQL;
+            try {
+
+                java.util.Date fechaUtil = new java.text.SimpleDateFormat("dd-MM-yyyy").parse(fecha.getText());
+                fechaSQL = new java.sql.Date(fechaUtil.getTime());
+            } catch (java.text.ParseException e) {
+                etiquetaError.setText("Error: Formato de fecha inválido (DD-MM-AAAA).");
+                JOptionPane.showMessageDialog(this, "Error: Formato de fecha inválido. Use DD-MM-AAAA.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            boolean registroExitoso = myDatabase.createTuplaPersonal(
+                    nombrePersonal,
+                    fechaSQL,
+                    rolSeleccionado,
+                    clave,
+                    passwordHasheada
+            );
+
+
+            if (registroExitoso) {
+                JOptionPane.showMessageDialog(this, "¡Personal registrado con éxito!\nRol: " + rolSeleccionado, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar el personal en la Base de Datos. Revise los logs de la consola.", "Error de BD", JOptionPane.ERROR_MESSAGE);
+                etiquetaError.setText("Error en la inserción de la BD.");
+            }
+
         } else {
-            JOptionPane.showMessageDialog(null, "Error al registrar el personal");
+            JOptionPane.showMessageDialog(this, "Error de Validación: " + etiquetaError.getText(), "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     public void cancelar() {
     }
-
 }
