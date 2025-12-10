@@ -170,7 +170,7 @@ public class crearEstudiante extends JFrame {
         }
 
         this.setContentPane(panelPrincipal);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(600, 500); // Tamaño fijo recomendado
         this.setLocationRelativeTo(null);
         this.setVisible(true);

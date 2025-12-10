@@ -2,11 +2,17 @@ package Package;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 //hhhh
-public class VistaGeneral_Administracion extends JFrame {
+public class VistaGeneral_Administracion extends JFrame implements ActionListener{
     public JButton altaCurso;
     public JButton crearEstudiante;
-    public VistaGeneral_Administracion(){
+    public JButton crearPersonal;
+    public Consult_Database mydatabase = new Consult_Database();
+
+    public VistaGeneral_Administracion(Consult_Database mydatabase) {
         setTitle("VistaGeneral_Administración");
         setSize(350, 200);
         inicializarComponentes();
@@ -14,20 +20,47 @@ public class VistaGeneral_Administracion extends JFrame {
         JPanel centro = new JPanel();
         centro.setLayout(null);
 
-        altaCurso.setBounds(120, 30, 80, 25);
+        altaCurso.setBounds(20, 75, 150, 25);
         centro.add(altaCurso);
 
-        crearEstudiante.setBounds(20, 30, 80, 25);
+        crearEstudiante.setBounds(20, 30, 150, 25);
         centro.add(crearEstudiante);
+
+        crearPersonal.setBounds(20, 100, 150, 25);
+        centro.add(crearPersonal);
 
         this.add(centro, BorderLayout.CENTER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setbuttoms();
         setVisible(true);
-
+        this.mydatabase=mydatabase;
     }
 
     public void inicializarComponentes() {
         altaCurso = new JButton("Dar De Alta Un Curso");
         crearEstudiante = new JButton("Crear Estudiante");
+        crearPersonal = new JButton("Crear Personal");
+    }
+
+    private void setbuttoms() {
+        altaCurso.addActionListener(this);
+        altaCurso.setActionCommand("altaCurso");
+        crearEstudiante.addActionListener(this);
+        crearEstudiante.setActionCommand("crearEstudiante");
+        crearPersonal.addActionListener(this);
+        crearPersonal.setActionCommand("crearPersonal");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "altaCurso":{
+                break;
+            }
+            case "crearEstudiante":{
+                crearEstudiante newform = new crearEstudiante(mydatabase);
+                break;
+            }
+        }
     }
 }
