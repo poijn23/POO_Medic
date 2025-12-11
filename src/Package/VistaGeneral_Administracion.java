@@ -45,7 +45,7 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
     }
 
     public void inicializarComponentes() {
-        altaCurso = new JButton("Dar De Alta Un Curso");
+        altaCurso = new JButton("Cursos");
         crearEstudiante = new JButton("Crear Estudiante");
         crearPersonal = new JButton("Crear Personal");
         subirCalificacion = new JButton("Subir Calificacion");
@@ -69,6 +69,7 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "altaCurso":{
+                VistaGeneral_Curso vista = new VistaGeneral_Curso(mydatabase);
                 break;
             }
             case "crearEstudiante":{

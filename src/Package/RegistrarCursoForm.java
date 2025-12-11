@@ -17,13 +17,13 @@ public class RegistrarCursoForm extends JFrame {
 
     private Consult_Database db;
 
-    public RegistrarCursoForm() {
+    public RegistrarCursoForm(Consult_Database db) {
         setTitle("Registrar curso");
         setSize(600, 520);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        db = new Consult_Database();
+        this.db = db;
 
         inicializarComponentes();
         setVisible(true);
