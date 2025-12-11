@@ -19,7 +19,7 @@ public class RegistroPersonal extends JFrame {
     public JLabel etiquetaPassword;
     public JTextField nombre;
     public JTextField fecha;
-    public String[] roles = {"Seleccione una opción", "Coordinador", "Técnico", "Administrativo"};
+    public String[] roles = {"Seleccione una opción", "Coordinador", "Tecnico", "Administrativo"};
     public JComboBox<String> rolesCombo = new JComboBox<>(roles);
     public JTextField clavePersonal;
     public JPasswordField passPersonal;
@@ -64,7 +64,7 @@ public class RegistroPersonal extends JFrame {
         centro.add(etiquetaError);
 
         this.add(centro, BorderLayout.CENTER);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
     }
@@ -180,8 +180,8 @@ public class RegistroPersonal extends JFrame {
                     nombrePersonal,
                     fechaSQL,
                     rolSeleccionado,
-                    //clave,
-                    passwordHasheada
+                    clave,
+                    passwordPlana
             );
 
             if (registroExitoso) {

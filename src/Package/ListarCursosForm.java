@@ -15,13 +15,13 @@ public class ListarCursosForm extends JFrame{
 
     private Consult_Database db;
 
-    public ListarCursosForm() {
+    public ListarCursosForm(Consult_Database db) {
         setTitle("Lista de Cursos");
         setSize(700, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        db = new Consult_Database();
+        this.db = db;
 
         inicializarComponentes();
         cargarCursos();

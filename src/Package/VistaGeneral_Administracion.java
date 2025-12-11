@@ -12,6 +12,7 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
     public JButton crearPersonal;
     public JButton subirCalificacion;
     public JButton generarReportes;
+    public JButton modificarEstudiante;
     public Consult_Database mydatabase = new Consult_Database();
 
     public VistaGeneral_Administracion(Consult_Database mydatabase) {
@@ -27,6 +28,8 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
 
         crearEstudiante.setBounds(20, 30, 150, 25);
         centro.add(crearEstudiante);
+        modificarEstudiante.setBounds(20, 100, 150, 25);
+        centro.add(modificarEstudiante);
 
         crearPersonal.setBounds(20, 100, 150, 25);
         centro.add(crearPersonal);
@@ -45,11 +48,13 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
     }
 
     public void inicializarComponentes() {
-        altaCurso = new JButton("Dar De Alta Un Curso");
+        altaCurso = new JButton("Cursos");
         crearEstudiante = new JButton("Crear Estudiante");
         crearPersonal = new JButton("Crear Personal");
         subirCalificacion = new JButton("Subir Calificacion");
         generarReportes = new JButton("Generar Reportes");
+        modificarEstudiante = new JButton("Modificar Estudiante");
+
     }
 
     private void setbuttoms() {
@@ -63,12 +68,15 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
         subirCalificacion.setActionCommand("subirCalificacion");
         generarReportes.addActionListener(this);
         generarReportes.setActionCommand("generarReportes");
+        modificarEstudiante.addActionListener(this);
+        modificarEstudiante.setActionCommand("modificarEstudiante");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "altaCurso":{
+                VistaGeneral_Curso vista = new VistaGeneral_Curso(mydatabase);
                 break;
             }
             case "crearEstudiante":{
@@ -81,6 +89,17 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
             }
             case  "generarReportes":{
                 GenerarReporte generarReporte = new GenerarReporte(mydatabase);
+                break;
+            }
+            case "crearPersonal":{
+                RegistroPersonal registroPersonal = new RegistroPersonal(mydatabase);
+                break;
+            }
+            case "modificarEstudiante":{
+                ModificarEstudiante modificarEstudiante = new ModificarEstudiante(mydatabase);
+            }
+            default:{
+                break;
             }
         }
     }

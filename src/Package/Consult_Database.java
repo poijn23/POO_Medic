@@ -150,8 +150,8 @@ public class Consult_Database {
         }catch(SQLException e){System.out.println(e.getMessage());}
     }
 
-    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String password) {
-        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO ) VALUES (?, ?, ?, ?, ?)";
+    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol,String ID, String password) {
+        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO, ID ) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection()) {
             if (conn == null) return false; // Falló la conexión
@@ -161,6 +161,7 @@ public class Consult_Database {
                 statement.setString(2, rol.trim());
                 statement.setString(3, nombre.trim());
                 statement.setDate(4, fechaNac);
+                statement.setString(5, ID);
 
                 int filasAfectadas = statement.executeUpdate();
 
@@ -439,4 +440,25 @@ public class Consult_Database {
         long diff = salida.getTime() - entrada.getTime();
         return diff / (1000.0 * 60.0 * 60.0);
     }
+
+    public void modifyTuplaAlumnos(String usuario, String contrasenia, String nombre, Date fech_nac, String curp, String especial, String area){
+        try(Connection conn=getConnection()){
+            assert conn != null;
+            String sql = "update Estudiantes set Nombre=?,Password=?,Fech_Nac=?,CURP=?,Especialidad=?,Area=? where ID=?";
+            try(PreparedStatement statement=conn.prepareStatement(sql)){
+                statement.setString(1,nombre.trim());
+                statement.setString(2,contrasenia.trim());
+                statement.setDate(3,fech_nac);
+                statement.setString(4,curp);
+                statement.setString(5,especial);
+                statement.setString(6,area);
+                statement.setString(7,usuario);
+                int rs = statement.executeUpdate();
+            }
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
 }

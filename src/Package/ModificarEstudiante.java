@@ -3,6 +3,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ModificarEstudiante extends JFrame {
     private JPanel panelContenido;
@@ -16,7 +19,7 @@ public class ModificarEstudiante extends JFrame {
     private JComboBox campoEspecialidad;
     private JTextField campoCURP;
     private JLabel cargandoLabel;
-
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     Consult_Database mysql;
 
     // Campo Especialidad como .json para (?)
@@ -35,8 +38,11 @@ public class ModificarEstudiante extends JFrame {
     // - Constructor -
     public ModificarEstudiante(Consult_Database database) {
         mysql = database;
-
-
+        campoArea.addItem("Medicina");
+        campoArea.addItem("Odontologia");
+        campoArea.addItem("Enfermeria");
+        campoArea.addItem("Nutricion");
+        llenarComboTipoParaMedicina();
         // Boton Modificar
         if (modificarButton != null) {
             modificarButton.addActionListener(new ActionListener() {
@@ -51,12 +57,12 @@ public class ModificarEstudiante extends JFrame {
                     String fechaNacimiento = campoFecha.getText().trim();
                     String curp = campoCURP.getText();
 
-                    String especialidad = (String) campoEspecialidad.getSelectedItem();
-                    String tipoEstudiante = "";
+                    String especialidad = (String) campoArea.getSelectedItem();
+                    String tipoEstudiante = (String) campoEspecialidad.getSelectedItem();
 
 
                     if (especialidad.equals("Medicina")) {
-                        tipoEstudiante = (String) campoArea.getSelectedItem();
+                        tipoEstudiante = (String) campoEspecialidad.getSelectedItem();
                     } else {
                         // No medicina, deben de ser servicio social
                         tipoEstudiante = "Servicio Social";
@@ -70,10 +76,8 @@ public class ModificarEstudiante extends JFrame {
                         return;
                     }
 
-                    final String tipoFinal = tipoEstudiante;
-
                     try {
-                        //Se necesita un procedimiento para hacer update a una tupla
+                        mysql.modifyTuplaAlumnos(matricula, contrasena, nombre, Date.valueOf(LocalDate.parse(fechaNacimiento, dateFormat)), curp, tipoEstudiante, especialidad);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(panelContenido, "Error al guardar en BD o fecha inválida: " + ex.getMessage());
                         modificarButton.setEnabled(true);
@@ -86,7 +90,20 @@ public class ModificarEstudiante extends JFrame {
             });
 
         }
+        this.setContentPane(panelContenido);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setSize(600, 500); // Tamaño fijo recomendado
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
 
+    private void llenarComboTipoParaMedicina() {
+        campoEspecialidad.removeAllItems(); // Limpiamos lo que haya
+        campoEspecialidad.addItem("Interno");
+        campoEspecialidad.addItem("Residente");
+        campoEspecialidad.addItem("Servicio social");
+        // Si medicina también acepta servicio social, descomenta la siguiente linea:
+        // TipoEstudianteBox.addItem("Servicio Social");
     }
 
     {
