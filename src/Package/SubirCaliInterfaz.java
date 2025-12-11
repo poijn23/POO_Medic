@@ -227,23 +227,8 @@ public class SubirCaliInterfaz extends JFrame {
                 cargarEstudiantesYCalificaciones(guardiaSeleccionada, periodoSeleccionado);
 
             } catch (SQLException ex) {
-                conn.rollback(); // Deshace si hay error
-
-                // --- DIAGNÓSTICO CLAVE ---
-                String errorMessage = "Error en DB: " + ex.getMessage() +
-                        "\nSQL State: " + ex.getSQLState() +
-                        "\nCódigo de Error MySQL: " + ex.getErrorCode(); // Muestra el número de error
-
-                // Interpreta los errores comunes
-                if (ex.getErrorCode() == 1452) {
-                    errorMessage += "\nREGLA: Fallo de Clave Foránea (ID de Estudiante o Periodo inexistente).";
-                } else if (ex.getErrorCode() == 1062) {
-                    errorMessage += "\nREGLA: Fallo de Clave Primaria Duplicada (Intentando INSERT cuando ya existe).";
-                }
-
-                JOptionPane.showMessageDialog(this, errorMessage, "Error de Guardado Crítico", JOptionPane.ERROR_MESSAGE);
-                // --------------------------
-
+                conn.rollback(); //rollback
+                JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), "Error de DB", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
         } catch (SQLException ex) {
@@ -252,3 +237,4 @@ public class SubirCaliInterfaz extends JFrame {
         }
     }
 }
+
