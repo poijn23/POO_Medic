@@ -29,5 +29,7 @@ public class Guardia {
     public void setZonaTrabajo(String zonaTrabajo) {
         this.zonaTrabajo = zonaTrabajo;
     }
+
+
 }
 
