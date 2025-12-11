@@ -332,4 +332,79 @@ public class Consult_Database {
 
         return curso;
     }
+
+    public List<Object[]> getReporteAsistencias(String fechaDesde, String fechaHasta, String especialidad, String area, String matricula) {
+
+        List<Object[]> resultados = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT RA.fecha, E.ID, E.Nombre, E.Especialidad, E.Area, RA.registroEntrada, RA.registroSalida ");
+        sql.append("FROM RegistroAsistencia RA ");
+        sql.append("JOIN Estudiantes E ON RA.matricula = E.ID ");
+        sql.append("WHERE 1=1 ");
+
+        List<String> params = new ArrayList<>();
+
+        if (fechaDesde != null && !fechaDesde.isEmpty() && fechaHasta != null && !fechaHasta.isEmpty()) {
+            sql.append("AND RA.fecha BETWEEN ? AND ? ");
+            params.add(fechaDesde);
+            params.add(fechaHasta);
+        }
+
+        if (!"Todas".equals(especialidad)) {
+            sql.append("AND E.Especialidad = ? ");
+            params.add(especialidad);
+        }
+
+        if (!"Todos".equals(area)) {
+            sql.append("AND E.Area = ? ");
+            params.add(area);
+        }
+
+        if (matricula != null && !matricula.isEmpty()) {
+            sql.append("AND E.ID = ? ");
+            params.add(matricula);
+        }
+
+        sql.append("ORDER BY RA.fecha, E.Nombre");
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                statement.setString(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    java.sql.Time entrada = rs.getTime("registroEntrada");
+                    java.sql.Time salida = rs.getTime("registroSalida");
+                    double totalHoras = calcularHoras(entrada, salida);
+
+                    Object[] fila = new Object[]{
+                            rs.getDate("fecha"),
+                            rs.getString("ID"),
+                            rs.getString("Nombre"),
+                            rs.getString("Especialidad"),
+                            rs.getString("Area"),
+                            entrada,
+                            salida,
+                            totalHoras
+                    };
+                    resultados.add(fila);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener reporte de asistencias: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return resultados;
+    }
+
+    private double calcularHoras(java.sql.Time entrada, java.sql.Time salida) {
+        if (entrada == null || salida == null) return 0.0;
+        long diff = salida.getTime() - entrada.getTime();
+        return diff / (1000.0 * 60.0 * 60.0);
+    }
 }
