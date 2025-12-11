@@ -32,10 +32,10 @@ public class crearEstudianteTest {
                 "Juan Perez",
                 "A012345",
                 "password123",
-                "MA123"         // <--- ERROR: Curp corta
+                "MA123"
         );
 
-        // 3. Esperamos FALSE
+        // 3. FALSE
         assertFalse("CP_002 Falló: El sistema debería rechazar CURPs cortas", resultado);
     }
 
@@ -52,7 +52,7 @@ public class crearEstudianteTest {
                 "ABCD12345678901234" // 18 caracteres
         );
 
-        // 3. Esperamos TRUE (Aceptado)
+        // 3. Esperamos TRUE
         assertTrue("CP_003 Falló: El sistema debería aceptar datos correctos", resultado);
     }
 }
