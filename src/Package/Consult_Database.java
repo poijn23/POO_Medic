@@ -149,19 +149,17 @@ public class Consult_Database {
         }catch(SQLException e){System.out.println(e.getMessage());}
     }
 
-    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String clavePersonal, String password) {
-        String sql = "INSERT INTO Personal (Nombre, Fech_Nacimiento, Rol, ClavePersonal, Password) VALUES (?, ?, ?, ?, ?)";
+    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String password) {
+        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO ) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection()) {
             if (conn == null) return false; // Falló la conexión
 
             try (PreparedStatement statement = conn.prepareStatement(sql)) {
-                statement.setString(1, nombre.trim());
-                statement.setDate(2, fechaNac);
-                statement.setString(3, rol.trim());
-                statement.setString(4, clavePersonal.trim());
-                statement.setString(5, password);
-
+                statement.setString(1, password);
+                statement.setString(2, rol.trim());
+                statement.setString(3, nombre.trim());
+                statement.setDate(4, fechaNac);
 
                 int filasAfectadas = statement.executeUpdate();
 
