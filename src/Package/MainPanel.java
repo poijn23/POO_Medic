@@ -39,7 +39,7 @@ public class MainPanel extends JFrame implements ActionListener {
                 if (myDatabase.validarUsuario(user.getText(), new String(password.getPassword()))) {
                     this.dispose();
                     switch (myDatabase.getRol(user.getText(), new String(password.getPassword()))) {
-                        case "Adm": {
+                        case "Administrativo": {
                             this.dispose();
                             VistaGeneral_Administracion vistaGeneralAdministracion = new VistaGeneral_Administracion(myDatabase);
                             break;
@@ -58,6 +58,9 @@ public class MainPanel extends JFrame implements ActionListener {
             case "altaEstudiante": {
                 System.out.println("Hola");
                 crearEstudiante crearEstudiante = new crearEstudiante(myDatabase);
+                break;
+            }
+            default: {
                 break;
             }
         }

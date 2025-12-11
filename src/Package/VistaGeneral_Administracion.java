@@ -11,6 +11,7 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
     public JButton crearEstudiante;
     public JButton crearPersonal;
     public JButton subirCalificacion;
+    public JButton generarReportes;
     public Consult_Database mydatabase = new Consult_Database();
 
     public VistaGeneral_Administracion(Consult_Database mydatabase) {
@@ -33,6 +34,9 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
         subirCalificacion.setBounds(20, 120, 150, 25);
         centro.add(subirCalificacion);
 
+        generarReportes.setBounds(20, 150, 150, 25);
+        centro.add(generarReportes);
+
         this.add(centro, BorderLayout.CENTER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setbuttoms();
@@ -45,6 +49,7 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
         crearEstudiante = new JButton("Crear Estudiante");
         crearPersonal = new JButton("Crear Personal");
         subirCalificacion = new JButton("Subir Calificacion");
+        generarReportes = new JButton("Generar Reportes");
     }
 
     private void setbuttoms() {
@@ -56,6 +61,8 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
         crearPersonal.setActionCommand("crearPersonal");
         subirCalificacion.addActionListener(this);
         subirCalificacion.setActionCommand("subirCalificacion");
+        generarReportes.addActionListener(this);
+        generarReportes.setActionCommand("generarReportes");
     }
 
     @Override
@@ -71,6 +78,9 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
             case "subirCalificacion":{
                 SubirCaliInterfaz subirCali = new SubirCaliInterfaz(mydatabase);
                 break;
+            }
+            case  "generarReportes":{
+                GenerarReporte generarReporte = new GenerarReporte(mydatabase);
             }
         }
     }

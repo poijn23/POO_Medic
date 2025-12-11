@@ -16,7 +16,7 @@ public class RegistroPersonal extends JFrame {
     public JLabel etiquetaPassword;
     public JTextField nombre;
     public JTextField fecha;
-    public String[] roles = {"Seleccione una opción", "Coordinador", "Técnico", "Personal Administrativo"};
+    public String[] roles = {"Seleccione una opción", "Coordinador", "Técnico", "Administrativo"};
     public JComboBox<String> rolesCombo = new JComboBox<>(roles);
     public JTextField clavePersonal;
     public JPasswordField passPersonal;
