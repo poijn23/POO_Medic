@@ -1,5 +1,6 @@
 package Package;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,8 +150,8 @@ public class Consult_Database {
         }catch(SQLException e){System.out.println(e.getMessage());}
     }
 
-    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String password) {
-        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO ) VALUES (?, ?, ?, ?, ?)";
+    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol,String ID, String password) {
+        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO, ID ) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection()) {
             if (conn == null) return false; // Falló la conexión
@@ -160,6 +161,7 @@ public class Consult_Database {
                 statement.setString(2, rol.trim());
                 statement.setString(3, nombre.trim());
                 statement.setDate(4, fechaNac);
+                statement.setString(5, ID);
 
                 int filasAfectadas = statement.executeUpdate();
 
@@ -295,7 +297,14 @@ public class Consult_Database {
     }
 
     //Eliminar un curso
-    public boolean deleteCurso (int id) {
+    public boolean deleteCurso(int id) {
+
+        //validar que el curso exista
+        if (!existsCurso(id)) {
+            System.err.println("Intento de eliminar un curso inexistente. ID: " + id);
+            return false;
+        }
+
         String sql = "DELETE FROM Cursos WHERE id = ?";
 
         try (Connection conn = getConnection();
@@ -303,13 +312,22 @@ public class Consult_Database {
 
             stmt.setInt(1, id);
 
-            return stmt.executeUpdate() > 0;
+            int filas = stmt.executeUpdate();
+
+            if (filas > 0) {
+                System.out.println("Curso eliminado correctamente. ID: " + id);
+                return true;
+            } else {
+                System.err.println("No se eliminó ningún registro. ID: " + id);
+                return false;
+            }
 
         } catch (SQLException e) {
             System.err.println("Error al eliminar curso: " + e.getMessage());
             return false;
         }
     }
+
 
     //Obtener un curso por su ID
     public Curso getCursoByID(int id) {

@@ -15,13 +15,13 @@ public class ListarCursosForm extends JFrame{
 
     private Consult_Database db;
 
-    public ListarCursosForm() {
+    public ListarCursosForm(Consult_Database db) {
         setTitle("Lista de Cursos");
         setSize(700, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        db = new Consult_Database();
+        this.db = db;
 
         inicializarComponentes();
         cargarCursos();
@@ -125,14 +125,14 @@ public class ListarCursosForm extends JFrame{
         int id = obtenerIdSeleccionado();
         if (id == -1) return;
 
-        //new VerCursoForm(id);
+        new VerCursoForm(id);
     }
 
     private void actualizarCurso() {
         int id = obtenerIdSeleccionado();
         if (id == -1) return;
 
-        //new EditarCursoForm(id);
+        new EditarCursoForm(id);
         cargarCursos();
     }
 

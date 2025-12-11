@@ -18,10 +18,11 @@ public class GenerarReporte extends JFrame {
     private JTable tablaResultados;
     private DefaultTableModel modeloTabla;
 
-    private Consult_Database dbManager = new Consult_Database();
+    private Consult_Database dbManager;
 
-    public GenerarReporte() {
+    public GenerarReporte(Consult_Database dbManager) {
         super("Generación de Reportes de Asistencias");
+        this.dbManager = dbManager;
         this.setLayout(new BorderLayout(10, 10));
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -34,6 +35,7 @@ public class GenerarReporte extends JFrame {
         setupPanelExportar();
 
         this.pack();
+        this.setVisible(true);
         this.setLocationRelativeTo(null);
     }
 
@@ -137,11 +139,5 @@ public class GenerarReporte extends JFrame {
             this.columnas = columnas;
             this.datos = datos;
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new GenerarReporte().setVisible(true);
-        });
     }
 }

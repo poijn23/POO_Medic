@@ -6,8 +6,10 @@ import java.awt.*;
 public class VistaGeneral_Curso extends JFrame{
     private JButton btnRegistrarCurso;
     private JButton btnListarCursos;
+    private Consult_Database myDatabase;
 
-    public VistaGeneral_Curso() {
+    public VistaGeneral_Curso(Consult_Database myDatabase) {
+        this.myDatabase = myDatabase;
         setTitle("Menú principal - Gestión de Cursos");
         setSize(300, 200);
         setLocationRelativeTo(null);
@@ -29,19 +31,14 @@ public class VistaGeneral_Curso extends JFrame{
 
         // Abrir la vista de registro
         btnRegistrarCurso.addActionListener(e -> {
-            RegistrarCursoForm registro = new RegistrarCursoForm();
+            RegistrarCursoForm registro = new RegistrarCursoForm(myDatabase);
             registro.setVisible(true);
         });
 
         // Abrir la vista de listado
         btnListarCursos.addActionListener(e -> {
-            ListarCursosForm lista = new ListarCursosForm();
+            ListarCursosForm lista = new ListarCursosForm(myDatabase);
             lista.setVisible(true);
         });
     }
-
-    public static void main(String[] args) {
-        new VistaGeneral_Curso();
-    }
-
 }
