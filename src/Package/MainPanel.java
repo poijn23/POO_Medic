@@ -14,7 +14,6 @@ public class MainPanel extends JFrame implements ActionListener {
     private JTextField user;
     private JPasswordField password;
     private JButton iniciarButton;
-    private JButton altaEstudiante;
 
     public MainPanel() {
 
@@ -37,7 +36,6 @@ public class MainPanel extends JFrame implements ActionListener {
             }
             case "iniciar": {
                 if (myDatabase.validarUsuario(user.getText(), new String(password.getPassword()))) {
-                    this.dispose();
                     switch (myDatabase.getRol(user.getText(), new String(password.getPassword()))) {
                         case "Administrativo": {
                             this.dispose();
@@ -50,6 +48,7 @@ public class MainPanel extends JFrame implements ActionListener {
                             break;
                         }
                         case "Alum": {
+                            this.dispose();
                             VistaGeneral_Estudiantes vistaGeneralEstudiantes = new VistaGeneral_Estudiantes(myDatabase);
                             break;
                         }
@@ -58,11 +57,6 @@ public class MainPanel extends JFrame implements ActionListener {
                         }
                     }
                 }
-                break;
-            }
-            case "altaEstudiante": {
-                System.out.println("Hola");
-                crearEstudiante crearEstudiante = new crearEstudiante(myDatabase);
                 break;
             }
             default: {
@@ -76,8 +70,6 @@ public class MainPanel extends JFrame implements ActionListener {
         asistenciaButton.setActionCommand("asistencia");
         iniciarButton.addActionListener(this);
         iniciarButton.setActionCommand("iniciar");
-        altaEstudiante.addActionListener(this);
-        altaEstudiante.setActionCommand("altaEstudiante");
     }
 
     {
@@ -97,9 +89,6 @@ public class MainPanel extends JFrame implements ActionListener {
     private void $$$setupUI$$$() {
         defaulPanel = new JPanel();
         defaulPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-        asistenciaButton = new JButton();
-        asistenciaButton.setText("Asistencia");
-        defaulPanel.add(asistenciaButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
         defaulPanel.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         HOLDER = new JPanel();
@@ -121,9 +110,9 @@ public class MainPanel extends JFrame implements ActionListener {
         cocntentpane.add(label2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         password = new JPasswordField();
         cocntentpane.add(password, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        altaEstudiante = new JButton();
-        altaEstudiante.setText("Estudiantes");
-        defaulPanel.add(altaEstudiante, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        asistenciaButton = new JButton();
+        asistenciaButton.setText("Asistencia");
+        defaulPanel.add(asistenciaButton, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
