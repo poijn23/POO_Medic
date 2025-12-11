@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class VistaGeneral_Estudiantes extends JFrame {
-    private final Consult_Database myDatabase = new Consult_Database();
+public class VistaGeneral_Estudiantes extends JFrame implements ActionListener {
+    private Consult_Database myDatabase;
     public JButton subirConstancia;
-    public VistaGeneral_Estudiantes() {
-        setTitle("VistaGeneral_Administración");
+
+
+    public VistaGeneral_Estudiantes(Consult_Database myDatabase) {
+        setTitle("VistaGeneral_Estudiantes");
         setSize(350, 200);
         inicializarComponentes();
 
@@ -21,23 +23,31 @@ public class VistaGeneral_Estudiantes extends JFrame {
         this.add(centro);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        setbuttoms();
+        this.myDatabase=myDatabase;
     }
 
     public void inicializarComponentes(){
         subirConstancia = new JButton("Subir Constancia");
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Subir Constancia": {
                 this.dispose();
-                SubirConstancia constanciaVista = new SubirConstancia();
+                SubirConstancia constanciaVista = new SubirConstancia(myDatabase);
                 break;
             }
             default: {
                 break;
             }
         }
+    }
+
+    private void setbuttoms(){
+        subirConstancia.addActionListener(this);
+        subirConstancia.setActionCommand("Subir Constancia");
     }
 }
 

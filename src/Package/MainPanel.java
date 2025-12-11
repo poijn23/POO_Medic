@@ -45,6 +45,7 @@ public class MainPanel extends JFrame implements ActionListener {
                             break;
                         }
                         case "Alum": {
+                            VistaGeneral_Estudiantes vistaGeneralEstudiantes = new VistaGeneral_Estudiantes(myDatabase);
                             break;
                         }
                         default: {
