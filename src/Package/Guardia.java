@@ -11,6 +11,7 @@ public class Guardia {
         this.zonaTrabajo = zonaTrabajo;
     }
 
+
     public String getTipoGuardia() {
         return tipoGuardia;
     }

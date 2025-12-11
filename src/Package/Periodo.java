@@ -8,6 +8,7 @@ public class Periodo {
     private Date  fechaInicio;
     private Date fechaFin;
 
+
     public Periodo (int idPeriodo, String nombrePeriodo){
         this.idPeriodo = idPeriodo;
         this.nombrePeriodo = nombrePeriodo;

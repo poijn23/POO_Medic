@@ -126,6 +126,7 @@ public class SubirCaliInterfaz extends JFrame {
         }
     }
 
+
     private void guardarCalificaciones() {
         //INSERT:
         String insertSql = "INSERT INTO calificacion (idEstudiante, idPeriodo, calificacionFinal) VALUES (?, ?, ?)";
