@@ -10,30 +10,40 @@ import java.util.List;
 public class SubirCaliInterfaz extends JFrame {
 
     private JComboBox<String> guardiaSelector;
+    private JComboBox<String> periodoSelector; // <-- NUEVO SELECTOR
     private JTable tablaEstudiantes;
     private DefaultTableModel tableModel;
     private JButton btnGuardar;
     private Consult_Database myDatabase;
-    private static final String PERIODO_ACTUAL = "2025-A";
+    // ELIMINAMOS: private static final String PERIODO_ACTUAL = "2025-A";
 
     public SubirCaliInterfaz(Consult_Database myDatabase) {
-        this.myDatabase=myDatabase;
+        this.myDatabase = myDatabase;
         setTitle("Carga de Calificaciones Finales");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        //(Selector de Guardia)
+        //Panel Superior (Selector de Periodo y Guardia)
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        //Selector de Periodo
+        periodoSelector = new JComboBox<>();
+        periodoSelector.addItem("Seleccione un Periodo...");
+        cargarPeriodosEnComboBox();
+        topPanel.add(new JLabel("Seleccionar Periodo:"));
+        topPanel.add(periodoSelector);
+
+        //Selector de Guardia
         guardiaSelector = new JComboBox<>();
         guardiaSelector.addItem("Seleccione una Guardia...");
         cargarGuardiasEnComboBox();
-
         topPanel.add(new JLabel("Seleccionar Guardia:"));
         topPanel.add(guardiaSelector);
+
         add(topPanel, BorderLayout.NORTH);
 
-        // Tabla de Estudiantes
+        //Tabla de Estudiantes
         String[] columnNames = {"ID/Matrícula", "Nombre", "Calificación Anterior", "Nueva Calificación"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int column) {
@@ -48,7 +58,7 @@ public class SubirCaliInterfaz extends JFrame {
         tablaEstudiantes = new JTable(tableModel);
         add(new JScrollPane(tablaEstudiantes), BorderLayout.CENTER);
 
-        //Botón de Guardar
+        // 3. Botón de Guardar
         btnGuardar = new JButton("Guardar Todas las Calificaciones");
         add(btnGuardar, BorderLayout.SOUTH);
 
@@ -58,25 +68,46 @@ public class SubirCaliInterfaz extends JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    //Métodos de Interfaz (Listeners)
-    private void agregarListeners() {
-        // Evento al seleccionar una guardia
-        guardiaSelector.addActionListener(e -> {
-            String guardiaSeleccionada = (String) guardiaSelector.getSelectedItem();
-            if (guardiaSeleccionada != null && !guardiaSeleccionada.startsWith("Seleccione")) {
-                cargarEstudiantesYCalificaciones(guardiaSeleccionada);
-            } else {
-                tableModel.setRowCount(0);
-            }
-        });
+    // Metodos de interfaz
 
-        // Evento al hacer clic en Guardar
+    private void agregarListeners() {
+        periodoSelector.addActionListener(e -> cargarDatosSiAmbosEstanSeleccionados());
+        guardiaSelector.addActionListener(e -> cargarDatosSiAmbosEstanSeleccionados());
+
         btnGuardar.addActionListener(e -> {
             guardarCalificaciones();
         });
     }
 
-    // Métodos de Acceso a Datos
+    private void cargarDatosSiAmbosEstanSeleccionados() {
+        String guardiaSeleccionada = (String) guardiaSelector.getSelectedItem();
+        String periodoSeleccionado = (String) periodoSelector.getSelectedItem();
+
+        boolean guardiaValida = guardiaSeleccionada != null && !guardiaSeleccionada.startsWith("Seleccione");
+        boolean periodoValido = periodoSeleccionado != null && !periodoSeleccionado.startsWith("Seleccione");
+
+        if (guardiaValida && periodoValido) {
+            cargarEstudiantesYCalificaciones(guardiaSeleccionada, periodoSeleccionado);
+        } else {
+            tableModel.setRowCount(0);
+        }
+    }
+
+    private void cargarPeriodosEnComboBox() {
+        String sql = "SELECT idPeriodo FROM periodo";
+        try (Connection conn = myDatabase.isConnected();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                periodoSelector.addItem(rs.getString("idPeriodo"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al cargar periodos: " + ex.getMessage(), "Error de DB", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
     private void cargarGuardiasEnComboBox() {
         String sql = "SELECT tipoGuardia FROM Guardia";
         try (Connection conn = myDatabase.isConnected();
@@ -92,27 +123,24 @@ public class SubirCaliInterfaz extends JFrame {
         }
     }
 
-
-    private void cargarEstudiantesYCalificaciones(String tipoGuardia) {
+    private void cargarEstudiantesYCalificaciones(String tipoGuardia, String idPeriodo) {
         tableModel.setRowCount(0);
 
-        // Consulta
         String sql = "SELECT e.ID, e.Nombre, c.calificacionFinal " +
                 "FROM Estudiantes e " +
-                "LEFT JOIN calificacion c ON e.ID = c.idEstudiante AND c.idPeriodo = ? " +
+                "LEFT JOIN calificacion c ON e.ID = c.IdEstudiante AND c.idPeriodo = ? " +
                 "WHERE e.tipoGuadiaFK = ?";
 
         try (Connection conn = myDatabase.isConnected();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, PERIODO_ACTUAL);
-            pstmt.setString(2, tipoGuardia);
+            pstmt.setString(1, idPeriodo); //id del Periodo
+            pstmt.setString(2, tipoGuardia); //guardia seleccionada
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     String id = rs.getString("ID");
                     String nombre = rs.getString("Nombre");
-
                     Object califAnterior = rs.getObject("calificacionFinal");
 
                     tableModel.addRow(new Object[]{id, nombre, califAnterior, null});
@@ -126,14 +154,21 @@ public class SubirCaliInterfaz extends JFrame {
 
 
     private void guardarCalificaciones() {
-        //INSERT:
+        String guardiaSeleccionada = (String) guardiaSelector.getSelectedItem();
+        String periodoSeleccionado = (String) periodoSelector.getSelectedItem();
+
+        if (guardiaSeleccionada == null || guardiaSeleccionada.startsWith("Seleccione") ||
+                periodoSeleccionado == null || periodoSeleccionado.startsWith("Seleccione")) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un Periodo y una Guardia antes de guardar.", "Error de Selección", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         String insertSql = "INSERT INTO calificacion (idEstudiante, idPeriodo, calificacionFinal) VALUES (?, ?, ?)";
-        //UPDATE:
-        String updateSql = "UPDATE calificacion SET calificacionFinal = ? WHERE idEstudiante = ? AND idPeriodo = ?";
+        String updateSql = "UPDATE calificacion SET calificacionFinal = ? WHERE IdEstudiante = ? AND idPeriodo = ?";
 
-        try (Connection conn = myDatabase.isConnected();) {
+        try (Connection conn = myDatabase.isConnected()) {
 
-            //Transaccion
+            //transaccion
             conn.setAutoCommit(false);
 
             try (PreparedStatement insertStmt = conn.prepareStatement(insertSql);
@@ -142,6 +177,7 @@ public class SubirCaliInterfaz extends JFrame {
                 int rows = tableModel.getRowCount();
                 for (int i = 0; i < rows; i++) {
                     String idEstudiante = (String) tableModel.getValueAt(i, 0);
+                            idEstudiante = idEstudiante.trim();
                     Object nuevaCalificacionObj = tableModel.getValueAt(i, 3);
                     Object calificacionAnteriorObj = tableModel.getValueAt(i, 2);
 
@@ -149,27 +185,34 @@ public class SubirCaliInterfaz extends JFrame {
                         continue;
                     }
 
-                    Float nuevaCalificacion = ((Number) nuevaCalificacionObj).floatValue();
+                    Float nuevaCalificacion;
 
-                    //Validación(0 a 100)
+                    try {
+                        nuevaCalificacion = ((Number) nuevaCalificacionObj).floatValue();
+                    } catch (ClassCastException | NullPointerException e) {
+                        //si el valor ingresado no es un número válido
+                        JOptionPane.showMessageDialog(this, "Error de formato de calificación para " + idEstudiante + ". Debe ingresar un número.", "Error de Conversión", JOptionPane.ERROR_MESSAGE);
+                        conn.rollback();
+                        return;
+                    }
+
+                    //validación(0 a 100)
                     if (nuevaCalificacion < 0 || nuevaCalificacion > 100) {
                         JOptionPane.showMessageDialog(this, "La calificación debe estar entre 0 y 100 para el estudiante " + idEstudiante, "Error de Validación", JOptionPane.ERROR_MESSAGE);
                         conn.rollback();
                         return;
                     }
 
-                    //INSERT o UPDATE
+                    //insert y update
                     if (calificacionAnteriorObj == null) {
-                        //Si no hay calificación -> INSERT
                         insertStmt.setString(1, idEstudiante);
-                        insertStmt.setString(2, PERIODO_ACTUAL);
+                        insertStmt.setString(2, periodoSeleccionado);
                         insertStmt.setFloat(3, nuevaCalificacion);
                         insertStmt.addBatch();
                     } else {
-                        //si hay calificación -> UPDATE
                         updateStmt.setFloat(1, nuevaCalificacion);
                         updateStmt.setString(2, idEstudiante);
-                        updateStmt.setString(3, PERIODO_ACTUAL);
+                        updateStmt.setString(3, periodoSeleccionado);
                         updateStmt.addBatch();
                     }
                 }
@@ -177,14 +220,14 @@ public class SubirCaliInterfaz extends JFrame {
                 insertStmt.executeBatch();
                 updateStmt.executeBatch();
 
-                conn.commit(); // Commit
+                conn.commit(); //commit
                 JOptionPane.showMessageDialog(this, "Calificaciones guardadas exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-                // Recargar los datos
-                cargarEstudiantesYCalificaciones((String) guardiaSelector.getSelectedItem());
+
+                cargarEstudiantesYCalificaciones(guardiaSeleccionada, periodoSeleccionado);
 
             } catch (SQLException ex) {
-                conn.rollback(); // Rollback si hay un error
+                conn.rollback(); //rollback
                 JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), "Error de DB", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             }
