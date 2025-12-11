@@ -39,7 +39,7 @@ public class Consult_Database {
         }
         return false;
     }
-    
+
     public String getRol(String name, String pass){
         String sql = "select role from view_name where ID = ? and Password = ?";
         String rol = null;
@@ -178,33 +178,50 @@ public class Consult_Database {
 
     //Dar de alta un curso
     public boolean createCurso(Curso curso) {
-        String sql = "INSERT INTO Cursos (nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Cursos (id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, curso.getNombreCurso());
-            stmt.setBoolean(2, curso.isObligatorio());
-            stmt.setBoolean(3, curso.isMedicina());
-            stmt.setBoolean(4, curso.isEnfermeria());
-            stmt.setBoolean(5, curso.isOdontologia());
-            stmt.setBoolean(6, curso.isNutriologia());
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            if (curso.getFechaInicio() != null) {
-                stmt.setDate(7, java.sql.Date.valueOf(curso.getFechaInicio()));
-            } else {
-                stmt.setNull(7, Types.DATE);
-            }
-            if (curso.getFechaFin() != null) {
-                stmt.setDate(8, java.sql.Date.valueOf(curso.getFechaFin()));
-            } else {
+            stmt.setInt(1, curso.getId());
+            stmt.setString(2, curso.getNombreCurso());
+            stmt.setBoolean(3, curso.isObligatorio());
+            stmt.setBoolean(4, curso.isMedicina());
+            stmt.setBoolean(5, curso.isEnfermeria());
+            stmt.setBoolean(6, curso.isOdontologia());
+            stmt.setBoolean(7, curso.isNutriologia());
+
+            if (curso.getFechaInicio() != null)
+                stmt.setDate(8, java.sql.Date.valueOf(curso.getFechaInicio()));
+            else
                 stmt.setNull(8, Types.DATE);
-            }
+
+            if (curso.getFechaFin() != null)
+                stmt.setDate(9, java.sql.Date.valueOf(curso.getFechaFin()));
+            else
+                stmt.setNull(9, Types.DATE);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error al insertar curso: " + e.getMessage());
             return false;
+        }
+    }
+
+    //Validar si el Id ya existe
+    public boolean existsCurso(int id) {
+        String sql = "SELECT id FROM Cursos WHERE id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error verificando ID: " + e.getMessage());
+            return true;
         }
     }
 

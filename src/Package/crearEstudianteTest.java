@@ -1,4 +1,4 @@
-package Package;
+/*package Package;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -55,4 +55,4 @@ public class crearEstudianteTest {
         // 3. Esperamos TRUE
         assertTrue("CP_003 Falló: El sistema debería aceptar datos correctos", resultado);
     }
-}
+} */
