@@ -192,7 +192,7 @@ public class crearEstudiante extends JFrame {
     // Generador simple de matrícula
     private String generarMatriculaAleatoria() {
         int numero = (int) (Math.random() * 9000) + 1000; // Número entre 1000 y 9999
-        return "EST-" + Year.now().getValue() + "-" + numero;
+        return "ES-" + Year.now().getValue() + "-" + numero;
     }
 
     // Generador simple de contraseña
