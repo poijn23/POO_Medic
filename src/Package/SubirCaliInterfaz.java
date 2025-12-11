@@ -13,19 +13,14 @@ public class SubirCaliInterfaz extends JFrame {
     private JTable tablaEstudiantes;
     private DefaultTableModel tableModel;
     private JButton btnGuardar;
-
-
-
-    private static final String DB_URL = "jdbc:mysql://34.31.14.40:3306/ProyectoDyPOO" +
-            "?serverTimezone=UTC&useSSL=false";
-    private static final String DB_USER = "grupoPOO";
-    private static final String DB_PASS = "LfftG2acd9Mv7%k7";
+    private Consult_Database myDatabase;
     private static final String PERIODO_ACTUAL = "2025-A";
 
-    public SubirCaliInterfaz() {
+    public SubirCaliInterfaz(Consult_Database myDatabase) {
+        this.myDatabase=myDatabase;
         setTitle("Carga de Calificaciones Finales");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
         //(Selector de Guardia)
@@ -58,6 +53,9 @@ public class SubirCaliInterfaz extends JFrame {
         add(btnGuardar, BorderLayout.SOUTH);
 
         agregarListeners();
+        this.pack();
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
     }
 
     //Métodos de Interfaz (Listeners)
@@ -81,7 +79,7 @@ public class SubirCaliInterfaz extends JFrame {
     // Métodos de Acceso a Datos
     private void cargarGuardiasEnComboBox() {
         String sql = "SELECT tipoGuardia FROM Guardia";
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        try (Connection conn = myDatabase.isConnected();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -104,7 +102,7 @@ public class SubirCaliInterfaz extends JFrame {
                 "LEFT JOIN calificacion c ON e.ID = c.idEstudiante AND c.idPeriodo = ? " +
                 "WHERE e.tipoGuadiaFK = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        try (Connection conn = myDatabase.isConnected();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, PERIODO_ACTUAL);
@@ -133,7 +131,7 @@ public class SubirCaliInterfaz extends JFrame {
         //UPDATE:
         String updateSql = "UPDATE calificacion SET calificacionFinal = ? WHERE idEstudiante = ? AND idPeriodo = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+        try (Connection conn = myDatabase.isConnected();) {
 
             //Transaccion
             conn.setAutoCommit(false);

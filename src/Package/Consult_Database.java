@@ -14,6 +14,11 @@ public class Consult_Database {
             return DriverManager.getConnection(DB_URL,DB_USER,DB_PASS);
     }
 
+    public Connection isConnected() throws SQLException{
+        Connection conn = getConnection();
+        return conn;
+    }
+
     public boolean validarUsuario(String usuario,String contrasenia) {
         String sql = "select * from view_name where ID = ? and Password = ?";
 

@@ -22,7 +22,7 @@ public class ModificarEstudiante extends JFrame {
     // Campo Especialidad como .json para (?)
 
     // Validación de Parámetros
-    public boolean validarDatos(String nombre, String matricula, String contrasena, String curp){
+    public boolean validarDatos(String nombre, String matricula, String contrasena, String curp) {
         if (nombre == null || nombre.trim().isEmpty()) return false;
         if (matricula == null || matricula.trim().isEmpty()) return false;
         if (contrasena == null || contrasena.trim().isEmpty()) return false;
@@ -35,8 +35,6 @@ public class ModificarEstudiante extends JFrame {
     // - Constructor -
     public ModificarEstudiante(Consult_Database database) {
         mysql = database;
-
-
 
 
         // Boton Modificar
@@ -57,15 +55,15 @@ public class ModificarEstudiante extends JFrame {
                     String tipoEstudiante = "";
 
 
-                    if (especialidad.equals("Medicina")){
+                    if (especialidad.equals("Medicina")) {
                         tipoEstudiante = (String) campoArea.getSelectedItem();
-                    }else{
+                    } else {
                         // No medicina, deben de ser servicio social
                         tipoEstudiante = "Servicio Social";
                     }
 
                     // Validación
-                    if (!validarDatos(nombre, matricula, contrasena, curp)){
+                    if (!validarDatos(nombre, matricula, contrasena, curp)) {
                         JOptionPane.showMessageDialog(panelContenido, "Datos incompletos o CURP inválida", "ERROR", JOptionPane.ERROR_MESSAGE);
                         if (cargandoLabel != null) cargandoLabel.setVisible(false);
                         modificarButton.setEnabled(true);
@@ -114,8 +112,8 @@ public class ModificarEstudiante extends JFrame {
         panelContenido.add(campoMatricula, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         campoContrasena = new JTextField();
         panelContenido.add(campoContrasena, new com.intellij.uiDesigner.core.GridConstraints(6, 0, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        campoGuardia = new JTextField();
-        panelContenido.add(campoGuardia, new com.intellij.uiDesigner.core.GridConstraints(8, 0, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        campoFecha = new JTextField();
+        panelContenido.add(campoFecha, new com.intellij.uiDesigner.core.GridConstraints(8, 0, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("Modificar Estudiante");
         panelContenido.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -167,6 +165,7 @@ public class ModificarEstudiante extends JFrame {
     public JComponent $$$getRootComponent$$$() {
         return panelContenido;
     }
+
 }
 
 
