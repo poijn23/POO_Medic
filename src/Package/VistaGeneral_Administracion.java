@@ -81,6 +81,14 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
             }
             case  "generarReportes":{
                 GenerarReporte generarReporte = new GenerarReporte(mydatabase);
+                break;
+            }
+            case "crearPersonal":{
+                RegistroPersonal registroPersonal = new RegistroPersonal(mydatabase);
+                break;
+            }
+            default:{
+                break;
             }
         }
     }

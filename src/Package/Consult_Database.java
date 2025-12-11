@@ -150,8 +150,8 @@ public class Consult_Database {
         }catch(SQLException e){System.out.println(e.getMessage());}
     }
 
-    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String password) {
-        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO ) VALUES (?, ?, ?, ?, ?)";
+    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol,String ID, String password) {
+        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO, ID ) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection()) {
             if (conn == null) return false; // Falló la conexión
@@ -161,6 +161,7 @@ public class Consult_Database {
                 statement.setString(2, rol.trim());
                 statement.setString(3, nombre.trim());
                 statement.setDate(4, fechaNac);
+                statement.setString(5, ID);
 
                 int filasAfectadas = statement.executeUpdate();
 
