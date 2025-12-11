@@ -44,6 +44,11 @@ public class MainPanel extends JFrame implements ActionListener {
                             VistaGeneral_Administracion vistaGeneralAdministracion = new VistaGeneral_Administracion(myDatabase);
                             break;
                         }
+                        case "Coordinador": {
+                            this.dispose();
+                            VistaGeneral_Administracion vistaGeneralAdministracion = new VistaGeneral_Administracion(myDatabase);
+                            break;
+                        }
                         case "Alum": {
                             VistaGeneral_Estudiantes vistaGeneralEstudiantes = new VistaGeneral_Estudiantes(myDatabase);
                             break;
