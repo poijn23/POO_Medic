@@ -13,8 +13,8 @@ public class crearEstudianteTest {
         // 2. Probamos enviando el NOMBRE vacío
         boolean resultado = formulario.validarDatos(
                 "",
-                "A012345",
-                "password123",
+                "A1",
+                "123",
                 "ABCD12345678901234" // CURP válida de 18
         );
 
@@ -32,7 +32,7 @@ public class crearEstudianteTest {
                 "Juan Perez",
                 "A012345",
                 "password123",
-                "MA123"         // <--- CURP CORTA (El error)
+                "MA123"
         );
 
         // 3. El resultado debe ser FALSE
