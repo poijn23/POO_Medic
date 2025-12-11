@@ -8,7 +8,7 @@ public class Main {
     private static JFrame frame;
     public static void main(String[] args) {
 
-    SwingUtilities.invokeLater(Main::createAndShowGUI);
+        SwingUtilities.invokeLater(Main::createAndShowGUI);
     }
 
 

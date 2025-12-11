@@ -60,6 +60,10 @@ public class crearEstudiante extends JFrame {
         EspecialidadcomboBox.addItem("Odontologia");
         EspecialidadcomboBox.addItem("Enfermeria");
         EspecialidadcomboBox.addItem("Nutricion");
+        EspecialidadcomboBox.addItem("Medicina");
+        EspecialidadcomboBox.addItem("Odontologia");
+        EspecialidadcomboBox.addItem("Enfermeria");
+        EspecialidadcomboBox.addItem("Nutricion");
 
         //mostrar las opciones de medicina por defecto
         llenarComboTipoParaMedicina();
@@ -166,7 +170,7 @@ public class crearEstudiante extends JFrame {
         }
 
         this.setContentPane(panelPrincipal);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(600, 500); // Tamaño fijo recomendado
         this.setLocationRelativeTo(null);
         this.setVisible(true);

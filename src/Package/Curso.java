@@ -1,36 +1,61 @@
 package Package;
+import java.time.LocalDate;
+
 public class Curso {
-    protected int idCurso;
-    protected String tipoCurso;
-    protected String nombreCurso;
+    private int id;
+    private String nombre;
+    private boolean obligatorio;
+    private boolean medicina;
+    private boolean enfermeria;
+    private boolean odontologia;
+    private boolean nutriologia;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 
-    public Curso(int idCurso, String tipoCurso, String nombreCurso) {
-        this.idCurso = idCurso;
-        this.tipoCurso = tipoCurso;
-        this.nombreCurso = nombreCurso;
+    public Curso(){}
+
+    public Curso(int id, String nombre, boolean obligatorio, boolean medicina, boolean enfermeria, boolean odontologia, boolean nutriologia, LocalDate fechaInicio, LocalDate fechaFin){
+        this.id = id;
+        this.nombre = nombre;
+        this.obligatorio = obligatorio;
+        this.medicina = medicina;
+        this.enfermeria = enfermeria;
+        this.odontologia = odontologia;
+        this.nutriologia = nutriologia;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
     }
 
-    public int getIdCurso() {
-        return idCurso;
-    }
+    //Getters y Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setIdCurso(int idCurso) {
-        this.idCurso = idCurso;
-    }
+    public String getNombreCurso() { return nombre; }
+    public void setNombreCurso(String nombre) { this.nombre = nombre; }
 
-    public String getTipoCurso() {
-        return tipoCurso;
-    }
+    public boolean isObligatorio() { return obligatorio; }
+    public void setObligatorio(boolean obligatorio) { this.obligatorio = obligatorio; }
 
-    public void setTipoCurso(String tipoCurso) {
-        this.tipoCurso = tipoCurso;
-    }
+    public boolean isMedicina() { return medicina; }
+    public void setMedicina(boolean medicina) { this.medicina = medicina; }
 
-    public String getNombreCurso() {
-        return nombreCurso;
-    }
+    public boolean isEnfermeria() { return enfermeria; }
+    public void setEnfermeria(boolean enfermeria) { this.enfermeria = enfermeria; }
 
-    public void setNombreCurso(String nombreCurso) {
-        this.nombreCurso = nombreCurso;
+    public boolean isOdontologia() { return odontologia; }
+    public void setOdontologia(boolean odontologia) { this.odontologia = odontologia; }
+
+    public boolean isNutriologia() { return nutriologia; }
+    public void setNutriologia(boolean nutriologia) { this.nutriologia = nutriologia; }
+
+    public LocalDate getFechaInicio() { return fechaInicio; }
+    public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }
+
+    public LocalDate getFechaFin() { return fechaFin; }
+    public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }

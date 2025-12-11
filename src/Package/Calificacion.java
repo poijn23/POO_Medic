@@ -3,14 +3,14 @@ package Package;
 public class Calificacion {
     private String matricula;
     private String nombre;
-    private String nombreCurso;
-    private String calificacionCurso;
+    private String nombrePeriodo;
+    private float calificacionFinal;
 
-    public Calificacion(String matricula, String nombre, String nombreCurso, String calificacionCurso) {
+    public Calificacion(String matricula, String nombre, String nombrePeriodo, float calificacionFinal) {
         this.matricula = matricula;
         this.nombre = nombre;
-        this.nombreCurso = nombreCurso;
-        this.calificacionCurso = calificacionCurso;
+        this.nombrePeriodo = nombrePeriodo;
+        this.calificacionFinal = calificacionFinal;
     }
     public String getMatricula() {
         return matricula;
@@ -24,16 +24,16 @@ public class Calificacion {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public String getNombreCurso() {
-        return nombreCurso;
+    public String getNombrePeriodo() {
+        return nombrePeriodo;
     }
-    public void setNombreCurso(String nombreCurso) {
-        this.nombreCurso = nombreCurso;
+    public void setNombrePeriodo(String nombrePeriodo) {
+        this.nombrePeriodo = nombrePeriodo;
     }
-    public String getCalificacionCurso() {
-        return calificacionCurso;
+    public float getCalificacionFinal() {
+        return calificacionFinal;
     }
-    public void setCalificacionCurso(String calificacionCurso) {
-        this.calificacionCurso = calificacionCurso;
+    public void setCalificacionFinal(float calificacionFinal) {
+        this.calificacionFinal = calificacionFinal;
     }
 }

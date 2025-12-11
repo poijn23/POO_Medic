@@ -15,11 +15,14 @@ public class SubirConstancia extends JFrame {
     public JComboBox<String> especialidadesComboBox = new JComboBox<>(especialidades);
     String[] cursos = {"1 Acciones Esenciales para la Seguridad del Paciente en el marco del Modelo Único de Evaluación de la Calidad (AESP‑MUEC)", "2 Trato Digno en los Servicios de Salud", "3 Interculturalidad en Salud", "4 Higiene de Manos, una práctica segura", "5 Principios de Propedéutica Médica y Expediente Clínico", "6 Medicina preventiva en adultos mayores", "7 Triage-profesional médico", "8 Enfermedad por coronavirus 2019 (COVID-19)", "9 COVID 19: Temas selectos para el personal médico", "10 Diagnóstico y tratamiento de los trastornos mentales en el primer nivel de atención", "11 Atención de Enfermería en el paciente con enfermedades crónicas no transmisibles", "12 Trastorno depresivo mayor", "13 Introducción a la Atención Primaria de Salud", "14 Diversidad sexo-genérica", "15 violencia y  género", "16 Trato digno", "17 Administración segura de medicamentos","18 Diagnóstico y tratamiento de la esclerosis múltiple", "19 Atención integral del niño", "20 Medicina basada en evidencia", "21 Temas selectos de nutrición", "22 Código delirium para el personal de Enfermería ", "23 Bases para el tratamiento nutricional", "24 Nutrición en situaciones especiales", "25 Nutrición en pacientes con padecimientos digestivos", "26 Diagnóstico y tratamiento de los principales traumatismos en el primer nivel de atención", "27 Economía de la salud: Temas selectos", "28 Lactancia materna", "29 Rehabilitación integral pos-COVID-19: aspectos cardiovasculares"};
     public JComboBox<String> cursosComboBox = new JComboBox<>(cursos);
-    public SubirConstancia() {
+    private Consult_Database mydatabase;
+
+
+    public SubirConstancia(Consult_Database mydatabase) {
         setTitle("Subir Constancia");
         setSize(400, 200);
         inicializarComponentes();
-//jjj
+
         JPanel centro = new JPanel();
         centro.setLayout(null);
 
@@ -54,6 +57,7 @@ public class SubirConstancia extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        this.mydatabase=mydatabase;
     }
 
     public void inicializarComponentes(){
