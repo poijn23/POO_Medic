@@ -175,7 +175,7 @@ public class Consult_Database {
 
     //Dar de alta un curso
     public boolean createCurso(Curso curso) {
-        String sql = "INSERT INTO cursos (nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin) " +
+        String sql = "INSERT INTO Cursos (nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
@@ -208,7 +208,7 @@ public class Consult_Database {
     //Obtener listado de cursos agregados
     public List<Curso> getAllCursos() {
         List<Curso> lista = new ArrayList<>();
-        String sql = "SELECT id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin FROM cursos";
+        String sql = "SELECT id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin FROM Cursos";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -242,7 +242,7 @@ public class Consult_Database {
 
     //Actualizar curso
     public boolean updateCurso (Curso curso) {
-        String sql = "UPDATE cursos SET nombre = ?, obligatorio = ?, medicina = ?, enfermeria = ?, odontologia = ?, nutriologia = ?, fecha_inicio = ?, fecha_fin = ? WHERE id = ?";
+        String sql = "UPDATE Cursos SET nombre = ?, obligatorio = ?, medicina = ?, enfermeria = ?, odontologia = ?, nutriologia = ?, fecha_inicio = ?, fecha_fin = ? WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -276,7 +276,7 @@ public class Consult_Database {
 
     //Eliminar un curso
     public boolean deleteCurso (int id) {
-        String sql = "DELETE FROM cursos WHERE id = ?";
+        String sql = "DELETE FROM Cursos WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -294,7 +294,7 @@ public class Consult_Database {
     //Obtener un curso por su ID
     public Curso getCursoByID(int id) {
         Curso curso = null;
-        String sql = "SELECT id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin FROM cursos WHERE id = ?";
+        String sql = "SELECT id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin FROM Cursos WHERE id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
