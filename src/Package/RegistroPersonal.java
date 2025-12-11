@@ -129,8 +129,8 @@ public class RegistroPersonal extends JFrame {
             mostrarError("La contraseña es obligatoria", passPersonal);
             return false;
         }
-        if (pass.length < 5) {
-            mostrarError("La contraseña debe tener al menos 5 caracteres", passPersonal);
+        if (pass.length < 12) {
+            mostrarError("La contraseña debe tener al menos 12 caracteres", passPersonal);
             return false;
         }
 
