@@ -9,7 +9,7 @@ import java.time.format.DateTimeParseException;
 
 public class RegistrarCursoForm extends JFrame {
 
-    private JTextField txtId;      // NUEVO CAMPO
+    private JTextField txtId;
     private JTextField txtNombre;
     private JCheckBox chkObligatorio, chkMedicina, chkEnfermeria, chkOdontologia, chkNutriologia;
     private JFormattedTextField txtFechaInicio, txtFechaFin;
@@ -54,7 +54,7 @@ public class RegistrarCursoForm extends JFrame {
         txtFechaFin = new JFormattedTextField(dateFormatter);
 
         // Añadir campos al formulario
-        panelFormulario.add(new JLabel("ID del curso:"));     // NUEVO
+        panelFormulario.add(new JLabel("ID del curso:"));
         panelFormulario.add(txtId);
 
         panelFormulario.add(new JLabel("Nombre del curso:"));
@@ -98,6 +98,53 @@ public class RegistrarCursoForm extends JFrame {
             if (chkObligatorio.isSelected()) chkMedicina.setSelected(true);
         });
     }
+
+    //Para test validar datos
+    public boolean validarDatos(int id, String nombre, String inicioTexto, String finTexto, boolean med, boolean enf,
+                                boolean odo, boolean nut, Consult_Database db) {
+
+        // 1. Validar ID
+        if (id <= 0) {
+            return false; // ID inválido o menor a 1
+        }
+
+        if (db.existsCurso(id)) {
+            return false; // ID ya existe
+        }
+
+        // 2. Validar nombre
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return false;
+        }
+
+        // 3. Validar fechas
+        if (inicioTexto == null || finTexto == null || inicioTexto.isEmpty() || finTexto.isEmpty()) {
+            return false;
+        }
+
+        LocalDate inicio;
+        LocalDate fin;
+
+        try {
+            inicio = LocalDate.parse(inicioTexto);
+            fin = LocalDate.parse(finTexto);
+        } catch (Exception e) {
+            return false; // Formato inválido
+        }
+
+        if (fin.isBefore(inicio)) {
+            return false; // Fecha fin antes de inicio
+        }
+
+        // 4. Validar que al menos una especialidad esté seleccionada
+        if (!med && !enf && !odo && !nut) {
+            return false;
+        }
+
+        // Todos los datos son válidos
+        return true;
+    }
+
 
     private void guardar() {
         try {
@@ -180,6 +227,25 @@ public class RegistrarCursoForm extends JFrame {
             JOptionPane.showMessageDialog(this, "Formato de fecha inválido.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error inesperado al registrar el curso.");
+        }
+
+        //Para test validar datos
+        int id = Integer.parseInt(txtId.getText().trim());
+        boolean ok = validarDatos(
+                id,
+                txtNombre.getText().trim(),
+                txtFechaInicio.getText().trim(),
+                txtFechaFin.getText().trim(),
+                chkMedicina.isSelected(),
+                chkEnfermeria.isSelected(),
+                chkOdontologia.isSelected(),
+                chkNutriologia.isSelected(),
+                db
+        );
+
+        if (!ok) {
+            JOptionPane.showMessageDialog(this, "Hay datos inválidos. Revisa los campos.");
+            return;
         }
     }
 
