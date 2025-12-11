@@ -1,6 +1,8 @@
 package Package;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Consult_Database {
     private static final String DB_URL = "jdbc:mysql://34.31.14.40:3306/ProyectoDyPOO";
@@ -201,5 +203,128 @@ public class Consult_Database {
             System.err.println("Error al insertar curso: " + e.getMessage());
             return false;
         }
+    }
+
+    //Obtener listado de cursos agregados
+    public List<Curso> getAllCursos() {
+        List<Curso> lista = new ArrayList<>();
+        String sql = "SELECT id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin FROM cursos";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Curso c = new Curso();
+
+                c.setId(rs.getInt("id"));
+                c.setNombreCurso(rs.getString("nombre"));
+                c.setObligatorio(rs.getBoolean("obligatorio"));
+                c.setMedicina(rs.getBoolean("medicina"));
+                c.setEnfermeria(rs.getBoolean("enfermeria"));
+                c.setOdontologia(rs.getBoolean("odontologia"));
+                c.setNutriologia(rs.getBoolean("nutriologia"));
+
+                java.sql.Date ini = rs.getDate("fecha_inicio");
+                java.sql.Date fin = rs.getDate("fecha_fin");
+
+                c.setFechaInicio(ini != null ? ini.toLocalDate() : null);
+                c.setFechaFin(fin != null ? fin.toLocalDate() : null);
+
+                lista.add(c);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener cursos: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    //Actualizar curso
+    public boolean updateCurso (Curso curso) {
+        String sql = "UPDATE cursos SET nombre = ?, obligatorio = ?, medicina = ?, enfermeria = ?, odontologia = ?, nutriologia = ?, fecha_inicio = ?, fecha_fin = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, curso.getNombreCurso());
+            stmt.setBoolean(2, curso.isObligatorio());
+            stmt.setBoolean(3, curso.isMedicina());
+            stmt.setBoolean(4, curso.isEnfermeria());
+            stmt.setBoolean(5, curso.isOdontologia());
+            stmt.setBoolean(6, curso.isNutriologia());
+
+            if (curso.getFechaInicio() != null)
+                stmt.setDate(7, java.sql.Date.valueOf(curso.getFechaInicio()));
+            else
+                stmt.setNull(7, Types.DATE);
+
+            if (curso.getFechaFin() != null)
+                stmt.setDate(8, java.sql.Date.valueOf(curso.getFechaFin()));
+            else
+                stmt.setNull(8, Types.DATE);
+
+            stmt.setInt(9, curso.getId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar curso: " + e.getMessage());
+            return false;
+        }
+    }
+
+    //Eliminar un curso
+    public boolean deleteCurso (int id) {
+        String sql = "DELETE FROM cursos WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar curso: " + e.getMessage());
+            return false;
+        }
+    }
+
+    //Obtener un curso por su ID
+    public Curso getCursoByID(int id) {
+        Curso curso = null;
+        String sql = "SELECT id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin FROM cursos WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    curso = new Curso();
+
+                    curso.setId(rs.getInt("id"));
+                    curso.setNombreCurso(rs.getString("nombre"));
+                    curso.setObligatorio(rs.getBoolean("obligatorio"));
+                    curso.setMedicina(rs.getBoolean("medicina"));
+                    curso.setEnfermeria(rs.getBoolean("enfermeria"));
+                    curso.setOdontologia(rs.getBoolean("odontologia"));
+                    curso.setNutriologia(rs.getBoolean("nutriologia"));
+
+                    java.sql.Date ini = rs.getDate("fecha_inicio");
+                    java.sql.Date fin = rs.getDate("fecha_fin");
+
+                    curso.setFechaInicio(ini != null ? ini.toLocalDate() : null);
+                    curso.setFechaFin(fin != null ? fin.toLocalDate() : null);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener curso por ID: " + e.getMessage());
+        }
+
+        return curso;
     }
 }
