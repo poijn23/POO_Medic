@@ -132,7 +132,7 @@ public class crearEstudiante extends JFrame {
                     final String tipoFinal = tipoEstudiante;
 
                     try {
-                        mysql.createTuplaAlumnos(matricula, contrasena, nombre, Date.valueOf(LocalDate.parse(fechaNacimiento, dateFormat)), curp, tipoFinal, especialidad);
+                        mysql.createTuplaAlumnos(matricula, contrasena, nombre, Date.valueOf(LocalDate.parse(fechaNacimiento, dateFormat)), curp, especialidad, tipoFinal);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(panelPrincipal, "Error al guardar en BD o fecha inválida: " + ex.getMessage());
                         guardarbutton.setEnabled(true);
