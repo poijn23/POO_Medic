@@ -170,4 +170,36 @@ public class Consult_Database {
             return false;
         }
     }
+
+    //Dar de alta un curso
+    public boolean createCurso(Curso curso) {
+        String sql = "INSERT INTO cursos (nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, curso.getNombreCurso());
+            stmt.setBoolean(2, curso.isObligatorio());
+            stmt.setBoolean(3, curso.isMedicina());
+            stmt.setBoolean(4, curso.isEnfermeria());
+            stmt.setBoolean(5, curso.isOdontologia());
+            stmt.setBoolean(6, curso.isNutriologia());
+
+            if (curso.getFechaInicio() != null) {
+                stmt.setDate(7, java.sql.Date.valueOf(curso.getFechaInicio()));
+            } else {
+                stmt.setNull(7, Types.DATE);
+            }
+            if (curso.getFechaFin() != null) {
+                stmt.setDate(8, java.sql.Date.valueOf(curso.getFechaFin()));
+            } else {
+                stmt.setNull(8, Types.DATE);
+            }
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al insertar curso: " + e.getMessage());
+            return false;
+        }
+    }
 }
