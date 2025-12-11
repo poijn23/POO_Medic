@@ -134,7 +134,7 @@ public class RegistrarCursoForm extends JFrame{
             c.setFechaInicio(inicio);
             c.setFechaFin(fin);
 
-            // Guardar utilizando Consult_Database
+            //Depende de la clase Consult_Database
             boolean ok = db.createCurso(c);
 
             if (ok) {

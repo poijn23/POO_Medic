@@ -35,8 +35,9 @@ public class VistaGeneral_Curso extends JFrame{
 
         // Abrir la vista de listado
         btnListarCursos.addActionListener(e -> {
-            //ListarCursosForm lista = new ListarCursosForm();
-            //lista.setVisible(true);
+            ListarCursosForm lista = new ListarCursosForm();
+            lista.setVisible(true);
         });
     }
+
 }
