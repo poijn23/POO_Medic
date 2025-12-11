@@ -188,7 +188,7 @@ public class SubirCaliInterfaz extends JFrame {
                     Float nuevaCalificacion;
 
                     try {
-                        nuevaCalificacion = ((Number) nuevaCalificacionObj).floatValue();
+                        nuevaCalificacion = Float.parseFloat(nuevaCalificacionObj.toString());
                     } catch (ClassCastException | NullPointerException e) {
                         //si el valor ingresado no es un número válido
                         JOptionPane.showMessageDialog(this, "Error de formato de calificación para " + idEstudiante + ". Debe ingresar un número.", "Error de Conversión", JOptionPane.ERROR_MESSAGE);
