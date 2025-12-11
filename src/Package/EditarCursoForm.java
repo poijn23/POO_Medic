@@ -7,14 +7,14 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
-public class EditarCursoForm extends JFrame{
+public class EditarCursoForm extends JFrame {
 
     private JTextField txtNombre;
     private JCheckBox chkObligatorio, chkMedicina, chkEnfermeria, chkOdontologia, chkNutriologia;
     private JFormattedTextField txtFechaInicio, txtFechaFin;
     private JButton btnActualizar, btnCancelar;
 
-    private int idCurso;
+    private final int idCurso;
 
     public EditarCursoForm(int id) {
         this.idCurso = id;
@@ -37,7 +37,6 @@ public class EditarCursoForm extends JFrame{
         DateFormatter dateFormatter = new DateFormatter(formato);
 
         setLayout(new BorderLayout(10, 10));
-
         JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 8, 8));
 
         txtNombre = new JTextField();
@@ -75,13 +74,11 @@ public class EditarCursoForm extends JFrame{
 
         // Botones
         JPanel panelBotones = new JPanel();
-
         btnActualizar = new JButton("Guardar cambios");
         btnCancelar = new JButton("Cancelar");
 
         panelBotones.add(btnActualizar);
         panelBotones.add(btnCancelar);
-
         add(panelBotones, BorderLayout.SOUTH);
 
         // Eventos
@@ -89,7 +86,7 @@ public class EditarCursoForm extends JFrame{
         btnCancelar.addActionListener(e -> dispose());
     }
 
-    //Cargar los datos predefinidos
+    // Cargar los datos existentes en el formulario
     private void cargarDatos(int id) {
         Consult_Database cd = new Consult_Database();
         Curso c = cd.getCursoByID(id);
@@ -110,11 +107,14 @@ public class EditarCursoForm extends JFrame{
         chkOdontologia.setSelected(c.isOdontologia());
         chkNutriologia.setSelected(c.isNutriologia());
 
-        txtFechaInicio.setText(c.getFechaInicio().toString());
-        txtFechaFin.setText(c.getFechaFin().toString());
+        if (c.getFechaInicio() != null)
+            txtFechaInicio.setText(c.getFechaInicio().toString());
+
+        if (c.getFechaFin() != null)
+            txtFechaFin.setText(c.getFechaFin().toString());
     }
 
-    //Actualizar el curso
+    // Actualizar el curso
     private void actualizar() {
         try {
 
@@ -127,8 +127,7 @@ public class EditarCursoForm extends JFrame{
             String finTexto = txtFechaFin.getText().trim();
 
             if (inicioTexto.isEmpty() || finTexto.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                        "Debe ingresar ambas fechas.");
+                JOptionPane.showMessageDialog(this, "Debe ingresar ambas fechas.");
                 return;
             }
 
@@ -151,7 +150,7 @@ public class EditarCursoForm extends JFrame{
                 return;
             }
 
-            // Construir curso actualizado
+            // Construir objeto con los cambios
             Curso c = new Curso();
             c.setId(idCurso);
             c.setNombreCurso(txtNombre.getText().trim());
@@ -169,14 +168,11 @@ public class EditarCursoForm extends JFrame{
                 JOptionPane.showMessageDialog(this, "Cambios guardados correctamente.");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this,
-                        "Error al actualizar el curso.");
+                JOptionPane.showMessageDialog(this, "Error al actualizar el curso.");
             }
 
         } catch (DateTimeParseException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Formato de fecha inválido.");
+            JOptionPane.showMessageDialog(this, "Formato de fecha inválido.");
         }
     }
-
 }

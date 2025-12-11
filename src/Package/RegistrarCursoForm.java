@@ -101,7 +101,7 @@ public class RegistrarCursoForm extends JFrame {
 
     private void guardar() {
         try {
-            // VALIDACIÓN ID
+            // validación Id vacío
             String idTexto = txtId.getText().trim();
             if (idTexto.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Debe ingresar el ID del curso.");
@@ -116,13 +116,13 @@ public class RegistrarCursoForm extends JFrame {
                 return;
             }
 
-            // Verificar si ya existe
+            // Verificar si ya existe el Id
             if (db.existsCurso(id)) {
                 JOptionPane.showMessageDialog(this, "El ID ingresado ya existe. Ingrese otro ID.");
                 return;
             }
 
-            // VALIDACIÓN NOMBRE
+            // validación nombre vacío
             if (txtNombre.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
                 return;
@@ -145,7 +145,7 @@ public class RegistrarCursoForm extends JFrame {
                 return;
             }
 
-            // VALIDACIÓN ESPECIALIDADES
+            // validación una especialidad seleccionada
             if (!chkMedicina.isSelected() &&
                     !chkEnfermeria.isSelected() &&
                     !chkOdontologia.isSelected() &&
