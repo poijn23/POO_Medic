@@ -1,5 +1,6 @@
 package Package;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Consult_Database {
         }
         return false;
     }
-    
+
     public String getRol(String name, String pass){
         String sql = "select role from view_name where ID = ? and Password = ?";
         String rol = null;
@@ -149,19 +150,17 @@ public class Consult_Database {
         }catch(SQLException e){System.out.println(e.getMessage());}
     }
 
-    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String clavePersonal, String password) {
-        String sql = "INSERT INTO Personal (Nombre, Fech_Nacimiento, Rol, ClavePersonal, Password) VALUES (?, ?, ?, ?, ?)";
+    public boolean createTuplaPersonal(String nombre, Date fechaNac, String rol, String password) {
+        String sql = "INSERT INTO Personal (Password, Role, NOMBRE, FECHA_NACIMIENTO ) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection()) {
             if (conn == null) return false; // Falló la conexión
 
             try (PreparedStatement statement = conn.prepareStatement(sql)) {
-                statement.setString(1, nombre.trim());
-                statement.setDate(2, fechaNac);
-                statement.setString(3, rol.trim());
-                statement.setString(4, clavePersonal.trim());
-                statement.setString(5, password);
-
+                statement.setString(1, password);
+                statement.setString(2, rol.trim());
+                statement.setString(3, nombre.trim());
+                statement.setDate(4, fechaNac);
 
                 int filasAfectadas = statement.executeUpdate();
 
@@ -180,33 +179,50 @@ public class Consult_Database {
 
     //Dar de alta un curso
     public boolean createCurso(Curso curso) {
-        String sql = "INSERT INTO Cursos (nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Cursos (id, nombre, obligatorio, medicina, enfermeria, odontologia, nutriologia, fecha_inicio, fecha_fin) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, curso.getNombreCurso());
-            stmt.setBoolean(2, curso.isObligatorio());
-            stmt.setBoolean(3, curso.isMedicina());
-            stmt.setBoolean(4, curso.isEnfermeria());
-            stmt.setBoolean(5, curso.isOdontologia());
-            stmt.setBoolean(6, curso.isNutriologia());
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            if (curso.getFechaInicio() != null) {
-                stmt.setDate(7, java.sql.Date.valueOf(curso.getFechaInicio()));
-            } else {
-                stmt.setNull(7, Types.DATE);
-            }
-            if (curso.getFechaFin() != null) {
-                stmt.setDate(8, java.sql.Date.valueOf(curso.getFechaFin()));
-            } else {
+            stmt.setInt(1, curso.getId());
+            stmt.setString(2, curso.getNombreCurso());
+            stmt.setBoolean(3, curso.isObligatorio());
+            stmt.setBoolean(4, curso.isMedicina());
+            stmt.setBoolean(5, curso.isEnfermeria());
+            stmt.setBoolean(6, curso.isOdontologia());
+            stmt.setBoolean(7, curso.isNutriologia());
+
+            if (curso.getFechaInicio() != null)
+                stmt.setDate(8, java.sql.Date.valueOf(curso.getFechaInicio()));
+            else
                 stmt.setNull(8, Types.DATE);
-            }
+
+            if (curso.getFechaFin() != null)
+                stmt.setDate(9, java.sql.Date.valueOf(curso.getFechaFin()));
+            else
+                stmt.setNull(9, Types.DATE);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error al insertar curso: " + e.getMessage());
             return false;
+        }
+    }
+
+    //Validar si el Id ya existe
+    public boolean existsCurso(int id) {
+        String sql = "SELECT id FROM Cursos WHERE id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error verificando ID: " + e.getMessage());
+            return true;
         }
     }
 
@@ -280,7 +296,14 @@ public class Consult_Database {
     }
 
     //Eliminar un curso
-    public boolean deleteCurso (int id) {
+    public boolean deleteCurso(int id) {
+
+        //validar que el curso exista
+        if (!existsCurso(id)) {
+            System.err.println("Intento de eliminar un curso inexistente. ID: " + id);
+            return false;
+        }
+
         String sql = "DELETE FROM Cursos WHERE id = ?";
 
         try (Connection conn = getConnection();
@@ -288,13 +311,22 @@ public class Consult_Database {
 
             stmt.setInt(1, id);
 
-            return stmt.executeUpdate() > 0;
+            int filas = stmt.executeUpdate();
+
+            if (filas > 0) {
+                System.out.println("Curso eliminado correctamente. ID: " + id);
+                return true;
+            } else {
+                System.err.println("No se eliminó ningún registro. ID: " + id);
+                return false;
+            }
 
         } catch (SQLException e) {
             System.err.println("Error al eliminar curso: " + e.getMessage());
             return false;
         }
     }
+
 
     //Obtener un curso por su ID
     public Curso getCursoByID(int id) {

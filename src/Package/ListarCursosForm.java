@@ -125,14 +125,14 @@ public class ListarCursosForm extends JFrame{
         int id = obtenerIdSeleccionado();
         if (id == -1) return;
 
-        //new VerCursoForm(id);
+        new VerCursoForm(id);
     }
 
     private void actualizarCurso() {
         int id = obtenerIdSeleccionado();
         if (id == -1) return;
 
-        //new EditarCursoForm(id);
+        new EditarCursoForm(id);
         cargarCursos();
     }
 

@@ -7,41 +7,38 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
-public class RegistrarCursoForm extends JFrame {
+public class EditarCursoForm extends JFrame {
 
-    private JTextField txtId;      // NUEVO CAMPO
     private JTextField txtNombre;
     private JCheckBox chkObligatorio, chkMedicina, chkEnfermeria, chkOdontologia, chkNutriologia;
     private JFormattedTextField txtFechaInicio, txtFechaFin;
-    private JButton btnGuardar, btnLimpiar;
+    private JButton btnActualizar, btnCancelar;
 
-    private Consult_Database db;
+    private final int idCurso;
 
-    public RegistrarCursoForm() {
-        setTitle("Registrar curso");
-        setSize(600, 520);
+    public EditarCursoForm(int id) {
+        this.idCurso = id;
+
+        setTitle("Editar curso");
+        setSize(500, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        db = new Consult_Database();
-
         inicializarComponentes();
+        cargarDatos(id);
+
         setVisible(true);
     }
 
     private void inicializarComponentes() {
-
         // Formato de fecha
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         formato.setLenient(false);
         DateFormatter dateFormatter = new DateFormatter(formato);
 
         setLayout(new BorderLayout(10, 10));
+        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 8, 8));
 
-        // Panel principal del formulario
-        JPanel panelFormulario = new JPanel(new GridLayout(7, 2, 8, 8));
-
-        txtId = new JTextField();   // NUEVO
         txtNombre = new JTextField();
 
         chkObligatorio = new JCheckBox("Obligatorio");
@@ -52,10 +49,6 @@ public class RegistrarCursoForm extends JFrame {
 
         txtFechaInicio = new JFormattedTextField(dateFormatter);
         txtFechaFin = new JFormattedTextField(dateFormatter);
-
-        // Añadir campos al formulario
-        panelFormulario.add(new JLabel("ID del curso:"));     // NUEVO
-        panelFormulario.add(txtId);
 
         panelFormulario.add(new JLabel("Nombre del curso:"));
         panelFormulario.add(txtNombre);
@@ -77,52 +70,54 @@ public class RegistrarCursoForm extends JFrame {
         panelFormulario.add(new JLabel("Fecha fin (YYYY-MM-DD):"));
         panelFormulario.add(txtFechaFin);
 
-        add(panelFormulario, BorderLayout.NORTH);
+        add(panelFormulario, BorderLayout.CENTER);
 
-        // Panel inferior
+        // Botones
         JPanel panelBotones = new JPanel();
-        btnGuardar = new JButton("Guardar");
-        btnLimpiar = new JButton("Limpiar");
+        btnActualizar = new JButton("Guardar cambios");
+        btnCancelar = new JButton("Cancelar");
 
-        panelBotones.add(new JLabel("Asegúrese de revisar que la información sea correcta"));
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnLimpiar);
-
+        panelBotones.add(btnActualizar);
+        panelBotones.add(btnCancelar);
         add(panelBotones, BorderLayout.SOUTH);
 
         // Eventos
-        btnGuardar.addActionListener(e -> guardar());
-        btnLimpiar.addActionListener(e -> limpiar());
-
-        chkObligatorio.addActionListener(e -> {
-            if (chkObligatorio.isSelected()) chkMedicina.setSelected(true);
-        });
+        btnActualizar.addActionListener(e -> actualizar());
+        btnCancelar.addActionListener(e -> dispose());
     }
 
-    private void guardar() {
+    // Cargar los datos existentes en el formulario
+    private void cargarDatos(int id) {
+        Consult_Database cd = new Consult_Database();
+        Curso c = cd.getCursoByID(id);
+
+        if (c == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró el curso",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
+        }
+
+        txtNombre.setText(c.getNombreCurso());
+        chkObligatorio.setSelected(c.isObligatorio());
+        chkMedicina.setSelected(c.isMedicina());
+        chkEnfermeria.setSelected(c.isEnfermeria());
+        chkOdontologia.setSelected(c.isOdontologia());
+        chkNutriologia.setSelected(c.isNutriologia());
+
+        if (c.getFechaInicio() != null)
+            txtFechaInicio.setText(c.getFechaInicio().toString());
+
+        if (c.getFechaFin() != null)
+            txtFechaFin.setText(c.getFechaFin().toString());
+    }
+
+    // Actualizar el curso
+    private void actualizar() {
         try {
-            // validación Id vacío
-            String idTexto = txtId.getText().trim();
-            if (idTexto.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Debe ingresar el ID del curso.");
-                return;
-            }
 
-            int id;
-            try {
-                id = Integer.parseInt(idTexto);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "El ID debe ser un número entero válido.");
-                return;
-            }
-
-            // Verificar si ya existe el Id
-            if (db.existsCurso(id)) {
-                JOptionPane.showMessageDialog(this, "El ID ingresado ya existe. Ingrese otro ID.");
-                return;
-            }
-
-            // validación nombre vacío
             if (txtNombre.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.");
                 return;
@@ -131,7 +126,6 @@ public class RegistrarCursoForm extends JFrame {
             String inicioTexto = txtFechaInicio.getText().trim();
             String finTexto = txtFechaFin.getText().trim();
 
-            // Validación de fechas vacías
             if (inicioTexto.isEmpty() || finTexto.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Debe ingresar ambas fechas.");
                 return;
@@ -141,23 +135,24 @@ public class RegistrarCursoForm extends JFrame {
             LocalDate fin = LocalDate.parse(finTexto);
 
             if (fin.isBefore(inicio)) {
-                JOptionPane.showMessageDialog(this, "La fecha de fin debe ser posterior a la fecha de inicio.");
+                JOptionPane.showMessageDialog(this,
+                        "La fecha de fin debe ser después de la fecha de inicio.");
                 return;
             }
 
-            // validación una especialidad seleccionada
             if (!chkMedicina.isSelected() &&
                     !chkEnfermeria.isSelected() &&
                     !chkOdontologia.isSelected() &&
                     !chkNutriologia.isSelected()) {
 
-                JOptionPane.showMessageDialog(this, "Debe seleccionar al menos una especialidad.");
+                JOptionPane.showMessageDialog(this,
+                        "Debe seleccionar al menos una especialidad.");
                 return;
             }
 
-            // Crear el objeto Curso
+            // Construir objeto con los cambios
             Curso c = new Curso();
-            c.setId(id);
+            c.setId(idCurso);
             c.setNombreCurso(txtNombre.getText().trim());
             c.setObligatorio(chkObligatorio.isSelected());
             c.setMedicina(chkMedicina.isSelected());
@@ -167,31 +162,17 @@ public class RegistrarCursoForm extends JFrame {
             c.setFechaInicio(inicio);
             c.setFechaFin(fin);
 
-            boolean ok = db.createCurso(c);
+            Consult_Database cd = new Consult_Database();
 
-            if (ok) {
-                JOptionPane.showMessageDialog(this, "Curso registrado correctamente.");
-                limpiar();
+            if (cd.updateCurso(c)) {
+                JOptionPane.showMessageDialog(this, "Cambios guardados correctamente.");
+                dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Error al registrar el curso.");
+                JOptionPane.showMessageDialog(this, "Error al actualizar el curso.");
             }
 
         } catch (DateTimeParseException ex) {
             JOptionPane.showMessageDialog(this, "Formato de fecha inválido.");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error inesperado al registrar el curso.");
         }
-    }
-
-    private void limpiar() {
-        txtId.setText("");
-        txtNombre.setText("");
-        txtFechaInicio.setText("");
-        txtFechaFin.setText("");
-        chkObligatorio.setSelected(false);
-        chkMedicina.setSelected(false);
-        chkEnfermeria.setSelected(false);
-        chkOdontologia.setSelected(false);
-        chkNutriologia.setSelected(false);
     }
 }

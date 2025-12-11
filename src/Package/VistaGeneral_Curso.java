@@ -40,4 +40,8 @@ public class VistaGeneral_Curso extends JFrame{
         });
     }
 
+    public static void main(String[] args) {
+        new VistaGeneral_Curso();
+    }
+
 }
