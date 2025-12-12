@@ -13,6 +13,7 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
     public JButton subirCalificacion;
     public JButton generarReportes;
     public JButton modificarEstudiante;
+    public JButton registropersonal;
     public Consult_Database mydatabase = new Consult_Database();
 
     public VistaGeneral_Administracion(Consult_Database mydatabase) {
@@ -23,22 +24,25 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
         JPanel centro = new JPanel();
         centro.setLayout(null);
 
-        altaCurso.setBounds(20, 75, 150, 25);
+        altaCurso.setBounds(20, 90, 150, 25);
         centro.add(altaCurso);
 
         crearEstudiante.setBounds(20, 30, 150, 25);
         centro.add(crearEstudiante);
-        modificarEstudiante.setBounds(20, 100, 150, 25);
+        modificarEstudiante.setBounds(20, 60, 150, 25);
         centro.add(modificarEstudiante);
 
-        crearPersonal.setBounds(20, 100, 150, 25);
+        crearPersonal.setBounds(20, 120, 150, 25);
         centro.add(crearPersonal);
 
-        subirCalificacion.setBounds(20, 120, 150, 25);
+        subirCalificacion.setBounds(20, 150, 150, 25);
         centro.add(subirCalificacion);
 
-        generarReportes.setBounds(20, 150, 150, 25);
+        generarReportes.setBounds(20, 180, 150, 25);
         centro.add(generarReportes);
+
+        registropersonal.setBounds(20, 210, 150, 25);
+        centro.add(registropersonal);
 
         this.add(centro, BorderLayout.CENTER);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,6 +58,7 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
         subirCalificacion = new JButton("Subir Calificacion");
         generarReportes = new JButton("Generar Reportes");
         modificarEstudiante = new JButton("Modificar Estudiante");
+        registropersonal = new JButton("Registropersonal");
 
     }
 
@@ -70,6 +75,8 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
         generarReportes.setActionCommand("generarReportes");
         modificarEstudiante.addActionListener(this);
         modificarEstudiante.setActionCommand("modificarEstudiante");
+        registropersonal.addActionListener(this);
+        registropersonal.setActionCommand("registropersonal");
     }
 
     @Override
@@ -97,6 +104,9 @@ public class VistaGeneral_Administracion extends JFrame implements ActionListene
             }
             case "modificarEstudiante":{
                 ModificarEstudiante modificarEstudiante = new ModificarEstudiante(mydatabase);
+            }
+            case "registropersonal":{
+                RegistroPersonal registroPersonal = new RegistroPersonal(mydatabase);
             }
             default:{
                 break;

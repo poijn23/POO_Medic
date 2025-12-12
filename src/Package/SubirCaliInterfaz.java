@@ -9,11 +9,11 @@ import java.util.List;
 
 public class SubirCaliInterfaz extends JFrame {
 
-    private JComboBox<String> guardiaSelector;
-    private JComboBox<String> periodoSelector; // <-- NUEVO SELECTOR
-    private JTable tablaEstudiantes;
-    private DefaultTableModel tableModel;
-    private JButton btnGuardar;
+    JComboBox<String> guardiaSelector;
+    JComboBox<String> periodoSelector; // <-- NUEVO SELECTOR
+    JTable tablaEstudiantes;
+    DefaultTableModel tableModel;
+    JButton btnGuardar;
     private Consult_Database myDatabase;
     // ELIMINAMOS: private static final String PERIODO_ACTUAL = "2025-A";
 
@@ -79,7 +79,7 @@ public class SubirCaliInterfaz extends JFrame {
         });
     }
 
-    private void cargarDatosSiAmbosEstanSeleccionados() {
+    void cargarDatosSiAmbosEstanSeleccionados() {
         String guardiaSeleccionada = (String) guardiaSelector.getSelectedItem();
         String periodoSeleccionado = (String) periodoSelector.getSelectedItem();
 

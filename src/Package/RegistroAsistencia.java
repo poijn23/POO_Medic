@@ -41,7 +41,7 @@ public class RegistroAsistencia extends JFrame implements ActionListener {
                 myDatabase.createTuplaAsistencia(Matricula.getText(), date, time);
             } else {
                 if (!myDatabase.isInAsistencia(Matricula.getText(), date, Boolean.TRUE)) {
-                    myDatabase.registroSalida(Matricula.getText(), date, time);
+                    myDatabase.registroSalida(Matricula.getText(), date, time, 1);
                 } else {
                     System.out.println("Ya se registro la salida");
                 }
@@ -90,5 +90,6 @@ public class RegistroAsistencia extends JFrame implements ActionListener {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
 }
 

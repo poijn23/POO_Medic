@@ -85,7 +85,7 @@ public class Consult_Database {
     public boolean isInAsistencia(String usuario, Date today){
     try(Connection conn=getConnection()){
         assert conn != null;
-        String sql = "select * from RegistroAsistencia where matricula = ? and fecha = ?";
+        String sql = "select matricula from RegistroAsistencia where matricula = ? and fecha = ?";
         try(PreparedStatement statement=conn.prepareStatement(sql)){
             statement.setString(1,usuario.trim());
             statement.setDate(2,today);
@@ -102,7 +102,7 @@ public class Consult_Database {
     public boolean isInAsistencia(String usuario, Date today, Boolean asistencia){
         try(Connection conn=getConnection()){
             assert conn != null;
-            String sql = "select * from RegistroAsistencia where matricula = ? and fecha = ? and asistencia = ?";
+            String sql = "select asistencia from RegistroAsistencia where matricula = ? and fecha = ? and asistencia = ?";
             try(PreparedStatement statement=conn.prepareStatement(sql)){
                 statement.setString(1,usuario.trim());
                 statement.setDate(2,today);
@@ -135,13 +135,13 @@ public class Consult_Database {
         }
     }
 
-    public void registroSalida(String usuario, Date today,Time RegistroSalida){
+    public void registroSalida(String usuario, Date today,Time RegistroSalida, int asistencia){
         try(Connection con=getConnection()){
             assert con != null;
             String sql="update RegistroAsistencia set registroSalida=?,asistencia=? where matricula=? and fecha=?";
             try(PreparedStatement statement=con.prepareStatement(sql)){
                 statement.setTime(1,RegistroSalida);
-                statement.setInt(2,1);
+                statement.setInt(2,asistencia);
                 statement.setString(3,usuario);
                 statement.setDate(4,today);
 
